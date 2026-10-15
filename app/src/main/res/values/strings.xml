@@ -12,6 +12,7 @@
     <string name="action_open_settings">Abrir ajustes</string>
 
     <string name="map_you_are_here">Estás aquí</string>
+    <string name="map_attribution">© OpenStreetMap contributors</string>
     <string name="location_no_fix_hint">Todavía no hay posición. Pulsa «Mi posición ahora» para situarte en el mapa.</string>
     <string name="action_locate_now">Mi posición ahora</string>
     <string name="action_start_tracking">Iniciar rastreo de ruta</string>
