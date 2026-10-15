@@ -71,6 +71,69 @@ class RouteMathTest {
     }
 
     @Test
+    fun distanceJustBelowOneKilometerStaysInMeters() {
+        assertEquals("999 m", RouteMath.formatDistance(999.4, Locale.US))
+    }
+
+    @Test
+    fun distanceThatRoundsToOneThousandMetersSwitchesToKilometers() {
+        // Antes salía "1000 m": se redondeaba a 1000 antes de decidir la unidad.
+        assertEquals("1.00 km", RouteMath.formatDistance(999.5, Locale.US))
+        assertEquals("1.00 km", RouteMath.formatDistance(999.99, Locale.US))
+        assertEquals("1.00 km", RouteMath.formatDistance(1000.0, Locale.US))
+    }
+
+    @Test
+    fun invalidDistancesAreShownAsZero() {
+        assertEquals("0 m", RouteMath.formatDistance(-5.0, Locale.US))
+        assertEquals("0 m", RouteMath.formatDistance(Double.NaN, Locale.US))
+        assertEquals("0 m", RouteMath.formatDistance(Double.POSITIVE_INFINITY, Locale.US))
+    }
+
+    @Test
+    fun distanceUsesTheLocaleDecimalSeparator() {
+        assertEquals("1,25 km", RouteMath.formatDistance(1250.0, Locale.forLanguageTag("es-ES")))
+    }
+
+    @Test
+    fun invalidSpeedsAreShownAsZero() {
+        assertEquals("0.0 km/h", RouteMath.formatSpeedKmh(Float.NaN, Locale.US))
+        assertEquals("0.0 km/h", RouteMath.formatSpeedKmh(-1f, Locale.US))
+        assertEquals("0.0 km/h", RouteMath.formatSpeedKmh(0f, Locale.US))
+    }
+
+    @Test
+    fun negativeDurationIsShownAsZero() {
+        assertEquals("00:00", RouteMath.formatDuration(-5))
+    }
+
+    @Test
+    fun durationOfMoreThanADayKeepsCountingHours() {
+        assertEquals("100:00:00", RouteMath.formatDuration(360_000))
+    }
+
+    @Test
+    fun distanceAcrossTheAntimeridianIsShortNotAroundTheWorld() {
+        val west = RoutePoint(0.0, 179.9)
+        val east = RoutePoint(0.0, -179.9)
+        assertEquals(22.2, RouteMath.distanceMeters(west, east) / 1000, 0.1)
+    }
+
+    @Test
+    fun distanceIsSymmetric() {
+        assertEquals(
+            RouteMath.distanceMeters(madrid, barcelona),
+            RouteMath.distanceMeters(barcelona, madrid),
+            0.001,
+        )
+    }
+
+    @Test
+    fun nanAccuracyIsNotUsableForRoute() {
+        assertFalse(RouteMath.isUsableForRoute(Float.NaN))
+    }
+
+    @Test
     fun formatsCoordinatesWithFiveDecimals() {
         assertEquals("40.41680, -3.70380", RouteMath.formatCoordinates(madrid))
     }

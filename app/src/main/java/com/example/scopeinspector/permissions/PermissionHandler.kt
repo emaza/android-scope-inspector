@@ -77,15 +77,17 @@ class PermissionGroupState internal constructor(
 
     fun request() {
         refresh()
-        val requestable = permissions.filter { states[it] == PermissionState.Denied }
-        val blocked = permissions.any { states[it] == PermissionState.PermanentlyDenied }
-        when {
-            requestable.isEmpty() -> if (blocked) dialog = PermissionDialog.Settings
-            requestable.any { activity?.shouldShowRequestPermissionRationale(it.manifestName) == true } -> {
-                pendingRequest = requestable
+        val plan = planPermissionRequest(permissions, states) { permission ->
+            activity?.shouldShowRequestPermissionRationale(permission.manifestName) == true
+        }
+        when (plan) {
+            PermissionRequestPlan.NoAction -> Unit
+            PermissionRequestPlan.OpenSettings -> dialog = PermissionDialog.Settings
+            is PermissionRequestPlan.ShowRationale -> {
+                pendingRequest = plan.permissions
                 dialog = PermissionDialog.Rationale
             }
-            else -> launchRequest(requestable)
+            is PermissionRequestPlan.Launch -> launchRequest(plan.permissions)
         }
     }
 

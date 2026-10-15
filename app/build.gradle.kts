@@ -1,3 +1,5 @@
+import java.time.Duration
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -32,6 +34,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    testOptions {
+        // Red de seguridad: un test colgado (p. ej. un bucle con delay en coroutines) no debe bloquear la CI.
+        unitTests.all { test -> test.timeout.set(Duration.ofMinutes(5)) }
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -54,4 +61,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
