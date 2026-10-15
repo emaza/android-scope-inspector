@@ -45,7 +45,7 @@ jobs:
           BASE: ${{ github.base_ref }}
         run: |
           if ! report=$(bash scripts/check-commit-format.sh "origin/${BASE}..HEAD"); then
-            echo "::warning title=Commits sin formato convencional::Hay commits que no sigue el formato y no contarán para la versión; ver el resumen del job."
+            echo "::warning title=Commits sin formato convencional::Hay commits que no siguen el formato y no contarán para la versión; ver el resumen del job."
             {
               echo "### Commits sin formato convencional"
               echo
