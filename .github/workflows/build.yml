@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Android SDK platform and build tools
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: 9.8.1
+
+      - name: Unit tests, lint and debug APK
+        run: gradle testDebugUnitTest lintDebug assembleDebug --stacktrace
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: scope-inspector-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
