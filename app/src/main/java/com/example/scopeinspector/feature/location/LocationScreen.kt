@@ -52,7 +52,7 @@ private fun PermissionGroupState.hasLocationAccess() =
 /**
  * Demo real del permiso de ubicación: el mapa te sitúa con la posición obtenida y, al iniciar
  * el rastreo, dibuja la ruta que recorres. El permiso se pide al pulsar un botón, no al abrir
- * la pantalla.
+ * la pantalla. El mapa se recibe como parámetro ([mapContent]) para poder sustituirlo en los tests.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +60,8 @@ fun LocationScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LocationViewModel = viewModel(factory = LocationViewModel.factory(LocalContext.current)),
+    mapContent: @Composable (current: RoutePoint?, route: List<RoutePoint>, modifier: Modifier) -> Unit =
+        { current, route, mapModifier -> RouteMap(current = current, route = route, modifier = mapModifier) },
 ) {
     val module = DemoModule.Location
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -107,10 +109,10 @@ fun LocationScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            RouteMap(
-                current = state.current?.point,
-                route = state.route,
-                modifier = Modifier
+            mapContent(
+                state.current?.point,
+                state.route,
+                Modifier
                     .fillMaxWidth()
                     .height(300.dp)
                     .clip(RoundedCornerShape(12.dp)),
