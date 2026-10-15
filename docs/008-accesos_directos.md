@@ -23,6 +23,19 @@ Se revisaron las 30 skills del plugin `android-skills` instalado: ninguna trata 
 - Cada atajo lanza `scopeinspector://module/<ruta>` contra `MainActivity` con un intent explícito, y Navigation lo resuelve con un deep link. No hay `intent-filter`, por lo que otras apps no pueden abrir un módulo por URL.
 - `MainActivity` es `singleTask`: con la app ya abierta, el atajo llega como nuevo intent. Navigation no lo procesa por sí sola (se comprobó en el código compilado de `navigation-runtime` 2.10.2: no registra ningún `OnNewIntentListener`), así que `AppNavGraph` lo reenvía con `handleDeepLink`.
 
+## Dónde se ven los atajos (comprobado en el móvil)
+
+Android distingue dos clases de icono en la pantalla de inicio:
+
+| Icono | Cómo se obtiene | ¿Muestra los 4 atajos al mantenerlo pulsado? |
+|---|---|---|
+| **Icono real de la app** | Está en el cajón de aplicaciones; lo añade el lanzador al instalar (si ese ajuste está activo) o se arrastra desde el cajón | **Sí**, también si se arrastra a la pantalla de inicio |
+| **Acceso directo fijado** | Es el que crea el diálogo "Añadir a la pantalla de inicio" de la app | **No**: es solo un atajo que abre la app, sin menú |
+
+Esto se detectó al probarlo: los atajos no salían al mantener pulsado el icono creado por el diálogo, pero sí en el icono del cajón y, al arrastrarlo a la pantalla de inicio, también allí. No era un fallo de la publicación de atajos.
+
+Android no permite que una app coloque por sí sola el icono real en la pantalla de inicio, así que se decidió **mantener el diálogo** y **avisar en la app**: la pantalla principal incluye una tarjeta "Atajos a los módulos" que explica dónde pulsar y que el acceso directo del diálogo no muestra los atajos.
+
 ## Código
 
 | Archivo | Función |
@@ -37,12 +50,13 @@ Se revisaron las 30 skills del plugin `android-skills` instalado: ninguna trata 
 ## Cómo probarlo en el móvil
 
 1. Desinstalar versiones anteriores e instalar el APK de la rama.
-2. Abrir la app: debe salir el diálogo del sistema "Añadir a la pantalla de inicio". Al aceptar aparece el icono en el escritorio y abre la app. Al cerrar y volver a abrir, el diálogo no reaparece.
-3. Mantener pulsado el icono de la app: salen los 4 atajos y cada uno abre su pantalla.
+2. Abrir la app: debe salir el diálogo del sistema "Añadir a la pantalla de inicio". Al aceptar aparece un icono en el escritorio que abre la app (sin atajos al mantenerlo pulsado). Al cerrar y volver a abrir, el diálogo no reaparece.
+3. Ir al **cajón de aplicaciones** y mantener pulsado el icono de Scope Inspector: salen los 4 atajos y cada uno abre su pantalla. Si se arrastra ese icono a la pantalla de inicio, los atajos también salen allí.
 4. Con la app abierta en otro módulo, usar un atajo: navega al módulo elegido.
+5. En la pantalla principal, al final de la lista, debe verse la tarjeta "Atajos a los módulos".
 
 ## Límites
 
-- **Posible icono duplicado:** muchos lanzadores ya ponen el icono de la app en el escritorio al instalar. El acceso directo fijado es independiente y podría haber dos iconos. La app no puede detectarlo.
+- **Posible icono duplicado:** muchos lanzadores ya ponen el icono real de la app en el escritorio al instalar. El acceso directo fijado es independiente y podría haber dos iconos, uno con atajos y otro sin ellos. La app no puede detectarlo.
 - **El usuario decide:** puede rechazar el diálogo, y los lanzadores sin soporte de accesos directos fijados no lo muestran.
 - El icono de la app es un vector sin variante adaptable; los lanzadores lo muestran tal cual.

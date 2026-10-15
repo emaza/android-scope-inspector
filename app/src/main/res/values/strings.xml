@@ -4,6 +4,9 @@
 
     <string name="version_label">v%1$s · build %2$d</string>
 
+    <string name="shortcuts_hint_title">Atajos a los módulos</string>
+    <string name="shortcuts_hint_body">Mantén pulsado el icono de la app en el cajón de aplicaciones para ir directo a Ubicación, Cámara, Biometría o Tareas. Si lo arrastras a la pantalla de inicio, los atajos también salen allí. El acceso directo que crea Android al abrir la app por primera vez solo abre la app y no muestra estos atajos.</string>
+
     <!-- Etiquetas cortas (unos 10 caracteres) de los atajos al mantener pulsado el icono -->
     <string name="shortcut_location">Ubicación</string>
     <string name="shortcut_camera">Cámara</string>
