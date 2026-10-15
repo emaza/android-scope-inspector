@@ -35,8 +35,17 @@ android {
     }
 
     testOptions {
+        // Robolectric necesita los recursos y el manifest reales para los tests de UI.
+        unitTests.isIncludeAndroidResources = true
         // Red de seguridad: un test colgado (p. ej. un bucle con delay en coroutines) no debe bloquear la CI.
-        unitTests.all { test -> test.timeout.set(Duration.ofMinutes(5)) }
+        unitTests.all { test ->
+            test.timeout.set(Duration.ofMinutes(5))
+            // Robolectric accede a internos del JDK (FileDescriptor, SharedSecrets) que Java 17+ encapsula.
+            test.jvmArgs(
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+                "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+        }
     }
 
     buildFeatures {
@@ -62,4 +71,11 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.navigation.testing)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
