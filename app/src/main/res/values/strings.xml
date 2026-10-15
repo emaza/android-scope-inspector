@@ -15,6 +15,8 @@
     <string name="permission_row">%1$s: %2$s</string>
 
     <string name="state_granted">Concedido</string>
+    <string name="state_granted_at_install">Concedido al instalar</string>
+    <string name="install_permission_explanation">Permiso normal: Android lo concede al instalar la aplicación y no se pide en ejecución, por eso no aparece ningún diálogo. Solo los permisos peligrosos (ubicación, cámara, micrófono, actividad física, notificaciones) se solicitan al usuario.</string>
     <string name="state_denied">Denegado</string>
     <string name="state_permanently_denied">Denegado permanentemente</string>
     <string name="state_not_applicable">No aplica en esta versión de Android</string>

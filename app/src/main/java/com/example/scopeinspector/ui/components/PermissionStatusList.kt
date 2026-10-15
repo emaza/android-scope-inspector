@@ -12,24 +12,37 @@ import androidx.compose.ui.unit.dp
 import com.example.scopeinspector.R
 import com.example.scopeinspector.permissions.AppPermission
 import com.example.scopeinspector.permissions.PermissionState
-import com.example.scopeinspector.permissions.labelRes
 
-/** Una línea por permiso con su estado; el estado se indica con texto, no solo con color. */
+/**
+ * Una línea por permiso con su estado; el estado se indica con texto, no solo con color.
+ * Si alguno es un permiso normal concedido al instalar, se explica la diferencia con los
+ * permisos peligrosos.
+ */
 @Composable
 fun PermissionStatusList(
     states: Map<AppPermission, PermissionState>,
     modifier: Modifier = Modifier,
 ) {
+    val hasInstallTimeGrant = states.any { (permission, state) ->
+        permission.grantedAtInstall && state == PermissionState.Granted
+    }
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         states.forEach { (permission, state) ->
             Text(
                 text = stringResource(
                     R.string.permission_row,
                     stringResource(permission.labelRes),
-                    stringResource(state.labelRes()),
+                    stringResource(permission.stateLabelRes(state)),
                 ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = state.color(),
+            )
+        }
+        if (hasInstallTimeGrant) {
+            Text(
+                text = stringResource(R.string.install_permission_explanation),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

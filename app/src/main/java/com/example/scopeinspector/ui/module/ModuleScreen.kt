@@ -55,11 +55,10 @@ fun ModuleScreen(module: DemoModule, onBack: () -> Unit, modifier: Modifier = Mo
             Text(text = stringResource(R.string.permissions_header), style = MaterialTheme.typography.titleMedium)
             PermissionStatusList(states = group.states)
             Text(text = stringResource(status.noteRes()), style = MaterialTheme.typography.bodyMedium)
-            Button(
-                onClick = group::request,
-                enabled = status == PermissionState.Denied || status == PermissionState.PermanentlyDenied,
-            ) {
-                Text(stringResource(R.string.action_request_permissions))
+            if (status == PermissionState.Denied || status == PermissionState.PermanentlyDenied) {
+                Button(onClick = group::request) {
+                    Text(stringResource(R.string.action_request_permissions))
+                }
             }
         }
     }

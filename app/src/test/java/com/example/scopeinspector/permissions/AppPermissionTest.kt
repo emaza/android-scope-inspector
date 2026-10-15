@@ -1,5 +1,6 @@
 package com.example.scopeinspector.permissions
 
+import com.example.scopeinspector.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -30,6 +31,29 @@ class AppPermissionTest {
         val minSdk = 26
         assertTrue(AppPermission.Camera.isApplicable(minSdk))
         assertTrue(AppPermission.FineLocation.isApplicable(minSdk))
+    }
+
+    @Test
+    fun onlyUseBiometricIsGrantedAtInstall() {
+        val installTime = AppPermission.entries.filter { it.grantedAtInstall }
+        assertEquals(listOf(AppPermission.UseBiometric), installTime)
+    }
+
+    @Test
+    fun grantedInstallTimePermissionShowsGrantedAtInstallLabel() {
+        assertEquals(
+            R.string.state_granted_at_install,
+            AppPermission.UseBiometric.stateLabelRes(PermissionState.Granted),
+        )
+        assertEquals(
+            R.string.state_not_applicable,
+            AppPermission.UseBiometric.stateLabelRes(PermissionState.NotApplicable),
+        )
+    }
+
+    @Test
+    fun grantedRuntimePermissionKeepsPlainGrantedLabel() {
+        assertEquals(R.string.state_granted, AppPermission.Camera.stateLabelRes(PermissionState.Granted))
     }
 
     @Test
