@@ -18,6 +18,7 @@ Android Scope Inspector: app demo (Kotlin + Jetpack Compose) con cuatro módulos
 source scripts/dev-env.sh     # JDK 21 y Android SDK del HOME del usuario; no toca archivos de perfil
 ./gradlew spotlessApply       # formatea el código con ktlint (la CI exige spotlessCheck)
 ./gradlew spotlessCheck testDebugUnitTest lintDebug assembleDebug
+./gradlew createDebugUnitTestCoverageReport   # cobertura: app/build/reports/coverage/test/debug/index.html
 ./gradlew --stop              # libera la memoria del daemon al terminar
 ```
 
@@ -30,6 +31,7 @@ Antes de subir, `./gradlew spotlessCheck testDebugUnitTest lintDebug` debe estar
 - Un fallo se arregla con un test que lo reproduce y falla antes del arreglo.
 - Lo que depende de un servicio del sistema se inyecta (interfaz + fake + fábrica manual); no hay framework de DI.
 - La lógica va en funciones puras fuera de Android. Robolectric exige JDK 21.
+- La CI falla si la cobertura de líneas baja del mínimo de `app/coverage-min.txt` (trinquete: solo se sube; resumen con `python3 scripts/coverage-summary.py --min-file app/coverage-min.txt`).
 
 ## Ramas, commits y versión
 
