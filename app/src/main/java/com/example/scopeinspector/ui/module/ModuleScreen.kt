@@ -21,6 +21,7 @@ import com.example.scopeinspector.navigation.DemoModule
 import com.example.scopeinspector.permissions.PermissionDialogs
 import com.example.scopeinspector.permissions.PermissionState
 import com.example.scopeinspector.permissions.rememberPermissionGroup
+import com.example.scopeinspector.ui.components.ModuleDescription
 import com.example.scopeinspector.ui.components.PermissionStatusList
 
 /**
@@ -52,6 +53,7 @@ fun ModuleScreen(module: DemoModule, onBack: () -> Unit, modifier: Modifier = Mo
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(text = stringResource(module.summaryRes), style = MaterialTheme.typography.bodyLarge)
+            ModuleDescription(module = module, showHowToTest = true)
             Text(text = stringResource(R.string.permissions_header), style = MaterialTheme.typography.titleMedium)
             PermissionStatusList(states = group.states)
             Text(text = stringResource(status.noteRes()), style = MaterialTheme.typography.bodyMedium)

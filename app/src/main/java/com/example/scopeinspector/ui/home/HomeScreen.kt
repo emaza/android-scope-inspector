@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scopeinspector.R
 import com.example.scopeinspector.navigation.DemoModule
 import com.example.scopeinspector.permissions.rememberPermissionStates
+import com.example.scopeinspector.ui.components.ModuleDescription
 import com.example.scopeinspector.ui.components.PermissionStatusList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +54,7 @@ private fun ModuleCard(module: DemoModule, onClick: () -> Unit) {
     Card(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(text = stringResource(module.titleRes), style = MaterialTheme.typography.titleMedium)
-            Text(text = stringResource(module.summaryRes), style = MaterialTheme.typography.bodyMedium)
+            ModuleDescription(module = module)
             PermissionStatusList(states = states)
         }
     }

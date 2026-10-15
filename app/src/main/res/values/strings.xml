@@ -11,6 +11,10 @@
     <string name="action_cancel">Cancelar</string>
     <string name="action_open_settings">Abrir ajustes</string>
 
+    <string name="label_feature">Qué aporta</string>
+    <string name="label_example">Ejemplo</string>
+    <string name="label_how_to_test">Cómo comprobarlo</string>
+
     <string name="permissions_header">Permisos</string>
     <string name="permission_row">%1$s: %2$s</string>
 
@@ -37,17 +41,29 @@
 
     <string name="module_location_title">Ubicación y actividad</string>
     <string name="module_location_summary">Muestra tu posición en un mapa y detecta si caminas o vas en vehículo. Usa FusedLocationProviderClient y ActivityRecognitionClient.</string>
+    <string name="module_location_feature">Dibuja tu ruta en un mapa y etiqueta cada tramo según lo que estás haciendo.</string>
+    <string name="module_location_example">Sales a andar: la app traza el recorrido en tiempo real y marca el tramo como «caminando» o «en vehículo».</string>
+    <string name="module_location_how_to_test">Pulsa «Solicitar permisos»: Android pedirá la ubicación (precisa o aproximada) y la actividad física. Concede o deniega y comprueba que el estado de cada permiso cambia aquí abajo. Próximamente: mapa con tu ruta y detección de actividad en vivo.</string>
     <string name="module_location_rationale">Necesitamos tu ubicación para dibujar la ruta en el mapa. La actividad física es opcional y solo se usa para etiquetar el tramo (caminando, en vehículo).</string>
 
     <string name="module_camera_title">Cámara y vídeo</string>
     <string name="module_camera_summary">Toma una foto o graba un clip corto con CameraX y reprodúcelo con Media3 / ExoPlayer.</string>
+    <string name="module_camera_feature">Captura fotos y vídeos con la cámara del dispositivo y los reproduce dentro de la app.</string>
+    <string name="module_camera_example">Grabas un clip de 10 segundos de tu escritorio y lo reproduces al instante para revisarlo.</string>
+    <string name="module_camera_how_to_test">Pulsa «Solicitar permisos» y concede la cámara; el micrófono es opcional (sin él los vídeos se graban sin sonido). Comprueba que el estado cambia aquí abajo. Próximamente: vista previa, fotos, vídeo y reproductor.</string>
     <string name="module_camera_rationale">Necesitamos la cámara para tomar la foto o el vídeo. El micrófono solo se usa para grabar el audio del vídeo; sin él grabaremos vídeo mudo.</string>
 
     <string name="module_biometric_title">Biometría</string>
     <string name="module_biometric_summary">Protege una acción sensible con huella o reconocimiento facial usando BiometricPrompt y Android Keystore.</string>
+    <string name="module_biometric_feature">Protege una acción o un dato con tu huella o tu cara.</string>
+    <string name="module_biometric_example">Para abrir una nota secreta la app te pide la huella; si no te reconoce, la nota sigue oculta.</string>
+    <string name="module_biometric_how_to_test">Este módulo no pide ningún permiso en ejecución: Android lo concede al instalar la aplicación. Próximamente: comprobar si tu móvil tiene biometría disponible y probar el desbloqueo de una nota secreta.</string>
     <string name="module_biometric_rationale">La autenticación biométrica la gestiona el sistema; la aplicación solo declara que la utiliza.</string>
 
     <string name="module_background_title">Segundo plano y notificaciones</string>
     <string name="module_background_summary">Programa una tarea diferida con WorkManager que avisa con una notificación al terminar.</string>
+    <string name="module_background_feature">Ejecuta trabajo pesado aunque cierres la app y te avisa al terminar.</string>
+    <string name="module_background_example">Lanzas una descarga simulada de 30 segundos, bloqueas el móvil y recibes una notificación cuando acaba.</string>
+    <string name="module_background_how_to_test">Pulsa «Solicitar permisos» y concede las notificaciones (Android 13 o superior; en versiones anteriores no se pide). Próximamente: programar una tarea y ver su progreso y la notificación final.</string>
     <string name="module_background_rationale">Necesitamos enviarte una notificación cuando la tarea en segundo plano termine. Si lo deniegas, la tarea se ejecuta igual pero sin aviso.</string>
 </resources>

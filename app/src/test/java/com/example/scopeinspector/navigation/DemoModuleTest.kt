@@ -21,6 +21,14 @@ class DemoModuleTest {
     }
 
     @Test
+    fun moduleDescriptionTextsAreDistinct() {
+        val texts = DemoModule.entries.flatMap {
+            listOf(it.summaryRes, it.featureRes, it.exampleRes, it.howToTestRes)
+        }
+        assertEquals(texts.size, texts.toSet().size)
+    }
+
+    @Test
     fun everyAppPermissionBelongsToExactlyOneModule() {
         val declared = DemoModule.entries.flatMap { it.permissions }
         assertEquals(AppPermission.entries.toSet(), declared.toSet())
