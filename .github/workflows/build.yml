@@ -10,9 +10,16 @@ on:
 permissions:
   contents: read
 
+# Un push nuevo a una PR o a una rama fase-* cancela la ejecución anterior. Nunca se cancela
+# main ni dev: el guard y la release de cada fusión tienen que terminar.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/fase-') }}
+
 jobs:
   build:
     runs-on: ubuntu-24.04
+    timeout-minutes: 25
     outputs:
       version: ${{ steps.version.outputs.versionName }}
       is_release: ${{ steps.version.outputs.isRelease }}
@@ -27,6 +34,7 @@ jobs:
           bash scripts/test-compute-version.sh
           bash scripts/test-check-pr-merge.sh
           bash scripts/test-pre-push-hook.sh
+          bash scripts/test-test-summary.sh
 
       - name: Compute version
         id: version
@@ -57,6 +65,14 @@ jobs:
       # Usa el wrapper del repo (gradle/wrapper); la acción valida además el checksum del gradle-wrapper.jar.
       - uses: gradle/actions/setup-gradle@v6
 
+      # Robolectric descarga ~200 MB de android-all en cada ejecución si no se cachean.
+      - name: Cache Robolectric android-all
+        uses: actions/cache@v6
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: robolectric-
+
       - name: Unit tests, lint and debug APK
         env:
           VERSION_NAME: ${{ steps.version.outputs.versionName }}
@@ -64,6 +80,25 @@ jobs:
         run: >
           ./gradlew testDebugUnitTest lintDebug assembleDebug --stacktrace
           "-PappVersionName=$VERSION_NAME" "-PappVersionCode=$VERSION_CODE"
+
+      # También cuando algo falla: es justo cuando hace falta el informe.
+      - name: Test and lint summary
+        if: always()
+        run: python3 -I scripts/test-summary.py >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload test and lint reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports-${{ steps.version.outputs.versionName }}
+          path: |
+            app/build/reports/tests/
+            app/build/test-results/
+            app/build/reports/lint-results-debug.html
+            app/build/reports/lint-results-debug.xml
+            app/build/reports/lint-results-debug.sarif
+          retention-days: 14
+          if-no-files-found: warn
 
       - name: Verify APK version
         env:
@@ -93,6 +128,7 @@ jobs:
   guard:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     permissions:
       contents: read
       pull-requests: read
@@ -110,6 +146,7 @@ jobs:
     needs: [build, guard]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.outputs.is_release == 'true'
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
