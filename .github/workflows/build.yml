@@ -54,16 +54,15 @@ jobs:
           yes | "$SDKMANAGER" --licenses > /dev/null || true
           "$SDKMANAGER" "platforms;android-37.0" "build-tools;36.0.0"
 
+      # Usa el wrapper del repo (gradle/wrapper); la acción valida además el checksum del gradle-wrapper.jar.
       - uses: gradle/actions/setup-gradle@v6
-        with:
-          gradle-version: 9.8.1
 
       - name: Unit tests, lint and debug APK
         env:
           VERSION_NAME: ${{ steps.version.outputs.versionName }}
           VERSION_CODE: ${{ steps.version.outputs.versionCode }}
         run: >
-          gradle testDebugUnitTest lintDebug assembleDebug --stacktrace
+          ./gradlew testDebugUnitTest lintDebug assembleDebug --stacktrace
           "-PappVersionName=$VERSION_NAME" "-PappVersionCode=$VERSION_CODE"
 
       - name: Verify APK version
