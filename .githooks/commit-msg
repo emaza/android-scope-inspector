@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Rechaza mensajes de commit que no siguen el formato convencional: de ellos depende la versión
+# (ver docs/decisiones.md, versionado).
+#
+# Activación (una vez por clon):  git config core.hooksPath .githooks
+# Salto puntual, bajo tu responsabilidad:  git commit --no-verify
+#
+# Git pasa como argumento el archivo con el mensaje.
+root="$(git rev-parse --show-toplevel 2>/dev/null || dirname "$0"/..)"
+# shellcheck source=scripts/conventional-commits.sh
+source "$root/scripts/conventional-commits.sh"
+
+# Primera línea que no sea un comentario ni esté vacía.
+subject="$(grep -vE '^(#|[[:space:]]*$)' "$1" | head -n 1 || true)"
+
+if cc_subject_ok "$subject"; then
+  exit 0
+fi
+
+echo "commit-msg: el mensaje no sigue el formato de commits convencionales." >&2
+echo "  recibido: ${subject:-<vacío>}" >&2
+echo "$CC_FORMAT_HELP" >&2
+exit 1

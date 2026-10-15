@@ -39,6 +39,7 @@ Antes de subir, `./gradlew spotlessCheck testDebugUnitTest lintDebug` debe estar
 - El repo es privado y GitHub no puede bloquear el push directo: lo detectan el job `guard` de CI y el hook `pre-push` (`git config core.hooksPath .githooks`).
 - **Commits convencionales** (`feat:`, `fix:`, `perf:`, `docs:`, `ci:`, `test:`, `chore:`, `build:`, `refactor:`), tipo en inglés y descripción en español. `feat` sube minor, `fix`/`perf` patch, `!` o `BREAKING CHANGE:` major; el resto no sube versión.
 - Al final de cada commit, el `Co-Authored-By` del agente que lo escribió.
+- Con `git config core.hooksPath .githooks` también se activa `commit-msg`, que rechaza mensajes sin formato convencional (`--no-verify` lo salta). La CI avisa, sin bloquear, de los commits de una PR que no lo siguen. Dependabot abre PR semanales a `dev` (`build(deps)` / `ci(deps)`).
 - Detalle del flujo y del versionado: `docs/decisiones.md`.
 
 ## Cosas que ya han dado problemas

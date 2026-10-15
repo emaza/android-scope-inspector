@@ -1,6 +1,6 @@
 # Plan del lote 3: automatización y calidad (CI, formato, cobertura, colaboración)
 
-> **Estado:** aprobado el 2026-10-15; en ejecución. Bloques A, B y C hechos; sigue D. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
+> **Estado:** aprobado el 2026-10-15; en ejecución. Los cuatro bloques (A a D) están hechos. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
 
 ## Context
 Los lotes 0-2 dejaron el entorno local, 165 tests y la CI en verde. El lote 3 convierte eso en una red de seguridad automática: que la CI deje **evidencias** cuando algo falla, que el código tenga un **formato y un lint exigibles**, que se **mida la cobertura**, y que las dependencias, los commits y las PR sigan **reglas comprobables**. Ya están hechos `AGENTS.md` y la estrategia de tests (lote 2), así que no entran aquí. Estado de partida (`dev` en `2c51f9c`): un solo workflow `build.yml` (jobs `build`, `guard`, `release`) sin `concurrency` ni `timeout-minutes`; sin informes subidos como artefactos; sin `.editorconfig`, linter ni Dependabot; `gradle.properties` con solo 4 líneas; lint con 6 avisos y 0 errores.
@@ -53,6 +53,7 @@ Archivos: `.github/dependabot.yml`, `.github/pull_request_template.md`, `.githoo
 3. **Hook `commit-msg`**: acepta el formato convencional `tipo(ámbito)!: descripción` con los mismos tipos que el versionado, y deja pasar `Merge …`, `Revert "…"` y `fixup!`; rechaza el resto con un mensaje que explica el formato. Se salta con `--no-verify`.
 4. **Una sola fuente de verdad**: el patrón de tipos y la regla de bump pasan a `scripts/conventional-commits.sh`, que cargan `compute-version.sh` y el hook (hoy `compute-version.sh` lo lleva escrito). Las 33 comprobaciones de `test-compute-version.sh` son la red de seguridad del refactor.
 5. **Aviso en CI** (no bloqueante) en las PR: lista en el resumen los commits que no siguen el formato, porque de ellos depende la versión.
+**Nota de ejecución:** al probar `check-commit-format.sh` se vio que con un rango inválido salía con 0 en silencio (el error de `git log` se perdía dentro de la sustitución de procesos); está corregido y con test.
 Verificación: `bash scripts/test-commit-msg-hook.sh` (casos válidos, inválidos, merge, revert, fixup) y los demás tests de scripts en verde; abrir la PR del propio bloque D con un commit mal formado para ver el aviso; confirmar que Dependabot aparece en la pestaña Insights.
 
 ## Documentación (en cada PR, solo los documentos vivos)

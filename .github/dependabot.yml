@@ -1,0 +1,38 @@
+# Actualizaciones semanales de dependencias, siempre hacia dev (main y dev solo cambian por PR).
+# El prefijo "build(deps)" / "ci(deps)" encaja con los commits convencionales y no sube la versión.
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+    groups:
+      androidx:
+        patterns: ["androidx.*"]
+      kotlin:
+        patterns: ["org.jetbrains.kotlin*", "org.jetbrains.kotlinx*"]
+      test:
+        patterns: ["junit*", "org.robolectric*"]
+    ignore:
+      # AGP y Kotlin van acoplados (compilador de Compose, matriz de compatibilidad): sus saltos mayores se suben a mano.
+      - dependency-name: "com.android.application*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "com.android.tools.build:gradle"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(deps)"

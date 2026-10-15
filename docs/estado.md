@@ -64,7 +64,7 @@ Depuración USB: `adb` está en `~/Android/Sdk/platform-tools`. Autorizar el ord
 
 1. Promocionar `dev` a `main` (`v0.2.1`).
 2. Módulos pendientes (ver tabla).
-3. **Lote 3 de automatización**, plan en [plan-lote-3.md](plan-lote-3.md): **A** CI (hecho), **B** ktlint con Spotless y lint estricto (hecho en `fase-formato-lint`), **C** cobertura con Jacoco (hecho en `fase-cobertura`), **D** Dependabot, plantilla de PR y hook `commit-msg`.
+3. ~~Lote 3 de automatización~~ **hecho** (CI con informes, ktlint y lint estricto, cobertura con mínimo, Dependabot, plantilla de PR y hook `commit-msg`); plan y decisiones en [plan-lote-3.md](plan-lote-3.md). Dependabot empezará a abrir PR a `dev` los lunes: se fusionan una a una por el flujo normal.
 4. **Lote 4, a valorar:** capturas de pantalla (con AGP 9.4.1 sería el plugin antiguo), E2E mínimo, R8.
 5. Borrar las ramas `fase-*` ya fusionadas, si el usuario lo pide.
 6. Subir `targetSdk` a 37 y revisar los avisos de lint cuando convenga.
