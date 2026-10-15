@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.version.outputs.versionName }}
       is_release: ${{ steps.version.outputs.isRelease }}
@@ -93,7 +93,7 @@ jobs:
   # (ver docs/009-flujo_de_ramas_y_pr.md). No revierte nada: marca el push en rojo.
   guard:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       pull-requests: read
@@ -110,7 +110,7 @@ jobs:
   release:
     needs: [build, guard]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.outputs.is_release == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:

@@ -20,7 +20,7 @@ Se revisaron las 30 skills del plugin `android-skills` instalado: ninguna trata 
 
 - Al mantener pulsado el icono de la app salen **Ubicación, Cámara, Biometría y Tareas**; cada uno abre su pantalla directamente y "atrás" lleva a la pantalla principal.
 - Se publican como atajos dinámicos a partir de `DemoModule` en cada arranque, así que añadir un módulo nuevo lo añade también a los atajos (el límite habitual de los lanzadores es 4).
-- Cada atajo lanza `scopeinspector://module/<ruta>` contra `MainActivity` con un intent explícito, y Navigation lo resuelve con un deep link. No hay `intent-filter`, por lo que otras apps no pueden abrir un módulo por URL.
+- Cada atajo lanza `scopeinspector://module/<ruta>` contra `MainActivity` con un intent explícito, y Navigation lo resuelve con un deep link. No hay `intent-filter`, así que el enlace no se puede abrir desde un navegador ni con un intent implícito. **Pero `MainActivity` está exportada y acepta intents explícitos: otra app podría abrir un módulo enviándole ese URI** (no probado en un dispositivo). El riesgo es bajo, porque solo abre pantallas de la demo; los módulos sensibles, como la nota biométrica, no deben depender de llegar por navegación (ver [010](010-analisis_de_tests_y_entorno.md)).
 - `MainActivity` es `singleTask`: con la app ya abierta, el atajo llega como nuevo intent. Navigation no lo procesa por sí sola (se comprobó en el código compilado de `navigation-runtime` 2.10.2: no registra ningún `OnNewIntentListener`), así que `AppNavGraph` lo reenvía con `handleDeepLink`.
 
 ## Dónde se ven los atajos (comprobado en el móvil)
