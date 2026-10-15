@@ -1,3 +1,5 @@
+> **Nota:** el plan vigente es [`004-plan_de_fases_detallado.md`](004-plan_de_fases_detallado.md). Este documento queda como referencia histórica.
+
 # Plan: Android Scope Inspector (app demo de APIs y permisos)
 
 ## Context
