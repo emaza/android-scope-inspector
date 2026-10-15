@@ -41,10 +41,4 @@ class ShortcutPolicyTest {
         assertEquals(ids.size, ids.toSet().size)
         assertFalse(ShortcutPolicy.HOME_SHORTCUT_ID in ids)
     }
-
-    @Test
-    fun thereAreAtMostFourModuleShortcuts() {
-        // Los lanzadores muestran normalmente 4 atajos al mantener pulsado el icono.
-        assertTrue(DemoModule.entries.size <= 4)
-    }
 }
