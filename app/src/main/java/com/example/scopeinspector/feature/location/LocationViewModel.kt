@@ -1,9 +1,11 @@
 package com.example.scopeinspector.feature.location
 
-import android.app.Application
-import android.os.SystemClock
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -34,8 +36,10 @@ data class LocationUiState(
     val message: LocationMessage? = null,
 )
 
-class LocationViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = LocationRepository(application)
+class LocationViewModel(
+    private val source: LocationSource,
+    private val clock: ElapsedClock = SystemElapsedClock,
+) : ViewModel() {
     private val _state = MutableStateFlow(LocationUiState())
     val state: StateFlow<LocationUiState> = _state.asStateFlow()
 
@@ -45,14 +49,14 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
     /** Una sola lectura de la posición actual, sin iniciar el rastreo. */
     fun locateOnce(precise: Boolean) {
         if (_state.value.loading) return
-        if (!repository.isLocationEnabled()) {
+        if (!source.isLocationEnabled()) {
             _state.update { it.copy(message = LocationMessage.LocationDisabled) }
             return
         }
         _state.update { it.copy(loading = true, message = null) }
         viewModelScope.launch {
             val fix = try {
-                repository.currentFix(precise)
+                source.currentFix(precise)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -71,33 +75,43 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
 
     fun startTracking(precise: Boolean) {
         if (trackingJob?.isActive == true) return
-        if (!repository.isLocationEnabled()) {
+        if (!source.isLocationEnabled()) {
             _state.update { it.copy(message = LocationMessage.LocationDisabled) }
             return
         }
-        val startedAt = SystemClock.elapsedRealtime()
+        val startedAt = clock.elapsedMillis()
         _state.update {
             LocationUiState(current = it.current, tracking = true)
         }
-        trackingJob = repository.fixes(precise)
-            .onEach { fix -> onFix(fix) }
-            .catch { _state.update { it.copy(tracking = false, message = LocationMessage.Error) } }
-            .launchIn(viewModelScope)
+        // El cronómetro se crea antes que la recogida: si el flujo falla de inmediato (con el
+        // dispatcher inmediato de Main la recogida arranca de forma síncrona), ya existe y se cancela.
+        stopTimer()
         timerJob = viewModelScope.launch {
             while (true) {
                 delay(1_000)
-                val elapsed = (SystemClock.elapsedRealtime() - startedAt) / 1_000
+                val elapsed = (clock.elapsedMillis() - startedAt) / 1_000
                 _state.update { it.copy(elapsedSeconds = elapsed) }
             }
         }
+        trackingJob = source.fixes(precise)
+            .onEach { fix -> onFix(fix) }
+            .catch {
+                stopTimer()
+                _state.update { it.copy(tracking = false, message = LocationMessage.Error) }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun stopTracking() {
         trackingJob?.cancel()
-        timerJob?.cancel()
         trackingJob = null
-        timerJob = null
+        stopTimer()
         _state.update { it.copy(tracking = false) }
+    }
+
+    private fun stopTimer() {
+        timerJob?.cancel()
+        timerJob = null
     }
 
     private fun onFix(fix: LocationFix) {
@@ -114,6 +128,13 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
                     message = null,
                 )
             }
+        }
+    }
+
+    companion object {
+        /** Fábrica manual: crea el ViewModel con la implementación real de Play Services. */
+        fun factory(context: Context): ViewModelProvider.Factory = viewModelFactory {
+            initializer { LocationViewModel(LocationRepository(context.applicationContext)) }
         }
     }
 }
