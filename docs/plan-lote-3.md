@@ -1,6 +1,6 @@
 # Plan del lote 3: automatización y calidad (CI, formato, cobertura, colaboración)
 
-> **Estado:** aprobado el 2026-10-15; en ejecución. Bloque A hecho (`fase-ci-evidencias`); siguen B, C y D. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
+> **Estado:** aprobado el 2026-10-15; en ejecución. Bloques A y B hechos; siguen C y D. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
 
 ## Context
 Los lotes 0-2 dejaron el entorno local, 165 tests y la CI en verde. El lote 3 convierte eso en una red de seguridad automática: que la CI deje **evidencias** cuando algo falla, que el código tenga un **formato y un lint exigibles**, que se **mida la cobertura**, y que las dependencias, los commits y las PR sigan **reglas comprobables**. Ya están hechos `AGENTS.md` y la estrategia de tests (lote 2), así que no entran aquí. Estado de partida (`dev` en `2c51f9c`): un solo workflow `build.yml` (jobs `build`, `guard`, `release`) sin `concurrency` ni `timeout-minutes`; sin informes subidos como artefactos; sin `.editorconfig`, linter ni Dependabot; `gradle.properties` con solo 4 líneas; lint con 6 avisos y 0 errores.
@@ -29,6 +29,7 @@ Verificación: ejecución en verde; y una **prueba negativa** en una rama desech
 
 ### B. Calidad de código: formato y lint estricto
 Archivos: `.editorconfig`, `gradle/libs.versions.toml`, `build.gradle.kts`/`app/build.gradle.kts`, `app/src/main/AndroidManifest.xml`, `app/src/main/res/xml/`, `app/lint.xml`.
+**Nota de ejecución:** Spotless no lee `ktlint_code_style` del `.editorconfig` (sí `max_line_length`), así que el estilo va en `build.gradle.kts` con `editorConfigOverride`; con `ktlint_official` el reformateo era de ~760 líneas y con `android_studio` más las comas finales, de ~65.
 1. **`.editorconfig`** con `ktlint_code_style = android_studio`, indentación de 4, y ajustes para Compose (`ktlint_function_naming_ignore_when_annotated_with = Composable`). El `max_line_length` se decide viendo cuántas infracciones da el código actual, para minimizar el ruido.
 2. **Spotless** con `ktlint` (1.8.0) sobre `**/*.kt` y `*.kts`: tareas `spotlessCheck` (en CI, en la misma invocación de Gradle) y `spotlessApply` (local).
 3. **Un único commit `style:`** con el reformateo del código existente, separado de los demás para que el diff sea revisable y no suba versión.

@@ -41,6 +41,11 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 - Un fallo se arregla con un test que lo reproduce y falla antes del arreglo.
 - La lógica va en funciones puras fuera de Android (`RouteMath`, `ShortcutPolicy`, `planPermissionRequest`).
 
+## Calidad de código
+- **Formato: ktlint con Spotless** (`./gradlew spotlessApply` / `spotlessCheck`, este último en la CI). No detekt: su versión estable (1.23.8) apunta a Kotlin 2.0 y el proyecto usa 2.4. Estilo `android_studio` con comas finales, definido en `build.gradle.kts` porque Spotless no lee `ktlint_code_style` de `.editorconfig` (sí `max_line_length`, 120).
+- **Lint estricto:** `warningsAsErrors = true`; lo que se ignora a propósito está en `app/lint.xml` con su motivo (`OldTargetApi`, `ReportShortcutUsage`, y los avisos de versiones nuevas, que son cosa de Dependabot). `InlinedApi` se suprime en `AppPermission` porque `sinceSdk` ya condiciona el uso.
+- Reglas de copia de seguridad (`data_extraction_rules.xml`, `backup_rules.xml`): se excluye todo, coherente con `allowBackup="false"`.
+
 ## Entorno de desarrollo
 - Local en `~/.local/dev-tools` y `~/Android/Sdk`, sin Android Studio, sin sudo y sin tocar archivos de perfil (`scripts/dev-env.sh`).
 - Con el móvil conectado, `adb` solo sobre esta app; sin capturas de pantalla salvo que se pidan; todo lo que se cambie en el móvil se restaura al terminar.

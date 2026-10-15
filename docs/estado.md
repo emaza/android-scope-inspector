@@ -33,11 +33,11 @@ motorola edge 40 neo, Android 15 (API 35), Play Services presente. Se comprobó 
 - **165 tests** JVM + Robolectric (0 fallos) y 50 comprobaciones de scripts bash. Sin medición de cobertura.
 - Comprobación de mutaciones: 8 errores introducidos a mano, los 8 detectados.
 - Huecos conocidos: el mapa real (osmdroid) no se prueba (se sustituye en los tests), `AppShortcuts` solo en su lógica, sin tests instrumentados ni de capturas. Robolectric corre en API 36 y el móvil lleva API 35.
-- Lint: 6 avisos, 0 errores (`InlinedApi` ×3, `OldTargetApi`, `DataExtractionRules`, `ReportShortcutUsage`).
+- Formato con ktlint (Spotless) y lint estricto: 0 avisos; lo ignorado a propósito está en `app/lint.xml`.
 
 ## CI
 
-Un solo workflow (`.github/workflows/build.yml`), en `ubuntu-24.04` con JDK 21 y `./gradlew`: jobs `build` (tests de scripts, cálculo de versión, tests, lint, APK y verificación con `aapt2`), `guard` (detecta pushes directos a `main`/`dev`) y `release` (tag y GitHub Release solo desde `main`). Tarda 2-6 minutos.
+Un solo workflow (`.github/workflows/build.yml`), en `ubuntu-24.04` con JDK 21 y `./gradlew`: jobs `build` (tests de scripts, cálculo de versión, formato, tests, lint, APK y verificación con `aapt2`), `guard` (detecta pushes directos a `main`/`dev`) y `release` (tag y GitHub Release solo desde `main`). Tarda 2-6 minutos.
 
 - **Informes**: cada ejecución sube el artefacto `reports-<versión>` (informes HTML/XML de tests y lint, 14 días) y escribe en el resumen del job el recuento de tests y avisos de lint (`scripts/test-summary.py`), también cuando falla. Gradle corre con `--continue` para que el lint se ejecute aunque falle un test.
 - `concurrency`: un push nuevo a una PR o a una rama `fase-*` cancela la ejecución anterior; `main` y `dev` nunca se cancelan. `timeout-minutes`: 25 (`build`), 5 (`guard`), 10 (`release`).
@@ -63,7 +63,7 @@ Depuración USB: `adb` está en `~/Android/Sdk/platform-tools`. Autorizar el ord
 
 1. Promocionar `dev` a `main` (`v0.2.1`).
 2. Módulos pendientes (ver tabla).
-3. **Lote 3 de automatización**, plan en [plan-lote-3.md](plan-lote-3.md): **A** CI (hecho en la PR de `fase-ci-evidencias`), **B** ktlint con Spotless y lint estricto, **C** cobertura con Jacoco, **D** Dependabot, plantilla de PR y hook `commit-msg`.
+3. **Lote 3 de automatización**, plan en [plan-lote-3.md](plan-lote-3.md): **A** CI (hecho), **B** ktlint con Spotless y lint estricto (hecho en `fase-formato-lint`), **C** cobertura con Jacoco, **D** Dependabot, plantilla de PR y hook `commit-msg`.
 4. **Lote 4, a valorar:** capturas de pantalla (con AGP 9.4.1 sería el plugin antiguo), E2E mínimo, R8.
 5. Borrar las ramas `fase-*` ya fusionadas, si el usuario lo pide.
 6. Subir `targetSdk` a 37 y revisar los avisos de lint cuando convenga.
