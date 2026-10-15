@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scope Inspector</string>
+
+    <string name="version_label">v%1$s · build %2$d</string>
+
+    <string name="shortcuts_hint_title">Atajos a los módulos</string>
+    <string name="shortcuts_hint_body">Mantén pulsado el icono de la app en el cajón de aplicaciones para ir directo a Ubicación, Cámara, Biometría o Tareas. Si lo arrastras a la pantalla de inicio, los atajos también salen allí. El acceso directo que crea Android al abrir la app por primera vez solo abre la app y no muestra estos atajos.</string>
+
+    <!-- Etiquetas cortas (unos 10 caracteres) de los atajos al mantener pulsado el icono -->
+    <string name="shortcut_location">Ubicación</string>
+    <string name="shortcut_camera">Cámara</string>
+    <string name="shortcut_biometric">Biometría</string>
+    <string name="shortcut_background">Tareas</string>
+
+    <string name="home_title">Scope Inspector</string>
+    <string name="home_intro">Demo de las APIs más representativas de Android y de los permisos que cada una necesita. Pulsa un módulo para ver su estado y probar la solicitud de permisos.</string>
+
+    <string name="action_back">Atrás</string>
+    <string name="action_request_permissions">Solicitar permisos</string>
+    <string name="action_continue">Continuar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_open_settings">Abrir ajustes</string>
+
+    <string name="map_you_are_here">Estás aquí</string>
+    <string name="map_attribution">© OpenStreetMap contributors</string>
+    <string name="location_no_fix_hint">Todavía no hay posición. Pulsa «Mi posición ahora» para situarte en el mapa.</string>
+    <string name="action_locate_now">Mi posición ahora</string>
+    <string name="action_start_tracking">Iniciar rastreo de ruta</string>
+    <string name="action_stop_tracking">Detener rastreo</string>
+    <string name="reading_position">Posición</string>
+    <string name="reading_accuracy">Precisión</string>
+    <string name="reading_access">Tipo de ubicación</string>
+    <string name="reading_speed">Velocidad</string>
+    <string name="reading_distance">Distancia</string>
+    <string name="reading_time">Tiempo</string>
+    <string name="reading_points">Puntos de la ruta</string>
+    <string name="access_precise">Precisa</string>
+    <string name="access_approximate">Aproximada</string>
+    <string name="access_none">Sin permiso</string>
+    <string name="accuracy_value">±%1$d m</string>
+    <string name="no_value">—</string>
+    <string name="msg_no_permission">Sin permiso de ubicación el mapa no puede situarte. Pulsa cualquiera de los botones para solicitarlo.</string>
+    <string name="msg_location_disabled">La ubicación del dispositivo está desactivada. Actívala en los ajustes del móvil para obtener tu posición.</string>
+    <string name="msg_no_fix">No se pudo obtener la posición. Prueba al aire libre o vuelve a intentarlo.</string>
+    <string name="msg_error">Ha ocurrido un error al obtener la ubicación.</string>
+    <string name="msg_low_accuracy">Precisión baja: esa lectura no se añade a la ruta. Con ubicación aproximada no se puede dibujar un recorrido.</string>
+
+    <string name="label_feature">Qué aporta</string>
+    <string name="label_example">Ejemplo</string>
+    <string name="label_how_to_test">Cómo comprobarlo</string>
+
+    <string name="permissions_header">Permisos</string>
+    <string name="permission_row">%1$s: %2$s</string>
+
+    <string name="state_granted">Concedido</string>
+    <string name="state_granted_at_install">Concedido al instalar</string>
+    <string name="install_permission_explanation">Permiso normal: Android lo concede al instalar la aplicación y no se pide en ejecución, por eso no aparece ningún diálogo. Solo los permisos peligrosos (ubicación, cámara, micrófono, actividad física, notificaciones) se solicitan al usuario.</string>
+    <string name="state_denied">Denegado</string>
+    <string name="state_permanently_denied">Denegado permanentemente</string>
+    <string name="state_not_applicable">No aplica en esta versión de Android</string>
+
+    <string name="note_granted">Todos los permisos están concedidos: la función estará completa.</string>
+    <string name="note_denied">Faltan permisos: la función se ofrecerá en modo reducido en lugar de bloquearse.</string>
+    <string name="note_not_applicable">Esta versión de Android no requiere permisos de ejecución para este módulo.</string>
+
+    <string name="settings_dialog_message">Has denegado este permiso de forma permanente. Para concederlo tienes que activarlo en los ajustes de la aplicación.</string>
+
+    <string name="perm_fine_location">Ubicación precisa</string>
+    <string name="perm_coarse_location">Ubicación aproximada</string>
+    <string name="perm_activity_recognition">Actividad física</string>
+    <string name="perm_camera">Cámara</string>
+    <string name="perm_record_audio">Micrófono</string>
+    <string name="perm_use_biometric">Biometría</string>
+    <string name="perm_post_notifications">Notificaciones</string>
+
+    <string name="module_location_title">Ubicación y actividad</string>
+    <string name="module_location_summary">Muestra tu posición en un mapa y detecta si caminas o vas en vehículo. Usa FusedLocationProviderClient y ActivityRecognitionClient.</string>
+    <string name="module_location_feature">Dibuja tu ruta en un mapa y etiqueta cada tramo según lo que estás haciendo.</string>
+    <string name="module_location_example">Sales a andar: la app traza el recorrido en tiempo real y marca el tramo como «caminando» o «en vehículo».</string>
+    <string name="module_location_how_to_test">Pulsa «Solicitar permisos»: Android pedirá la ubicación (precisa o aproximada) y la actividad física. Concede o deniega y comprueba que el estado de cada permiso cambia aquí abajo. Próximamente: mapa con tu ruta y detección de actividad en vivo.</string>
+    <string name="module_location_rationale">Necesitamos tu ubicación para dibujar la ruta en el mapa. La actividad física es opcional y solo se usa para etiquetar el tramo (caminando, en vehículo).</string>
+
+    <string name="module_camera_title">Cámara y vídeo</string>
+    <string name="module_camera_summary">Toma una foto o graba un clip corto con CameraX y reprodúcelo con Media3 / ExoPlayer.</string>
+    <string name="module_camera_feature">Captura fotos y vídeos con la cámara del dispositivo y los reproduce dentro de la app.</string>
+    <string name="module_camera_example">Grabas un clip de 10 segundos de tu escritorio y lo reproduces al instante para revisarlo.</string>
+    <string name="module_camera_how_to_test">Pulsa «Solicitar permisos» y concede la cámara; el micrófono es opcional (sin él los vídeos se graban sin sonido). Comprueba que el estado cambia aquí abajo. Próximamente: vista previa, fotos, vídeo y reproductor.</string>
+    <string name="module_camera_rationale">Necesitamos la cámara para tomar la foto o el vídeo. El micrófono solo se usa para grabar el audio del vídeo; sin él grabaremos vídeo mudo.</string>
+
+    <string name="module_biometric_title">Biometría</string>
+    <string name="module_biometric_summary">Protege una acción sensible con huella o reconocimiento facial usando BiometricPrompt y Android Keystore.</string>
+    <string name="module_biometric_feature">Protege una acción o un dato con tu huella o tu cara.</string>
+    <string name="module_biometric_example">Para abrir una nota secreta la app te pide la huella; si no te reconoce, la nota sigue oculta.</string>
+    <string name="module_biometric_how_to_test">Este módulo no pide ningún permiso en ejecución: Android lo concede al instalar la aplicación. Próximamente: comprobar si tu móvil tiene biometría disponible y probar el desbloqueo de una nota secreta.</string>
+    <string name="module_biometric_rationale">La autenticación biométrica la gestiona el sistema; la aplicación solo declara que la utiliza.</string>
+
+    <string name="module_background_title">Segundo plano y notificaciones</string>
+    <string name="module_background_summary">Programa una tarea diferida con WorkManager que avisa con una notificación al terminar.</string>
+    <string name="module_background_feature">Ejecuta trabajo pesado aunque cierres la app y te avisa al terminar.</string>
+    <string name="module_background_example">Lanzas una descarga simulada de 30 segundos, bloqueas el móvil y recibes una notificación cuando acaba.</string>
+    <string name="module_background_how_to_test">Pulsa «Solicitar permisos» y concede las notificaciones (Android 13 o superior; en versiones anteriores no se pide). Próximamente: programar una tarea y ver su progreso y la notificación final.</string>
+    <string name="module_background_rationale">Necesitamos enviarte una notificación cuando la tarea en segundo plano termine. Si lo deniegas, la tarea se ejecuta igual pero sin aviso.</string>
+</resources>
