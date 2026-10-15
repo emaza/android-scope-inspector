@@ -4,6 +4,12 @@
 
     <string name="version_label">v%1$s · build %2$d</string>
 
+    <!-- Etiquetas cortas (unos 10 caracteres) de los atajos al mantener pulsado el icono -->
+    <string name="shortcut_location">Ubicación</string>
+    <string name="shortcut_camera">Cámara</string>
+    <string name="shortcut_biometric">Biometría</string>
+    <string name="shortcut_background">Tareas</string>
+
     <string name="home_title">Scope Inspector</string>
     <string name="home_intro">Demo de las APIs más representativas de Android y de los permisos que cada una necesita. Pulsa un módulo para ver su estado y probar la solicitud de permisos.</string>
 

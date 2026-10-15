@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.ui.Modifier
 import com.example.scopeinspector.navigation.AppNavGraph
+import com.example.scopeinspector.shortcuts.AppShortcuts
 import com.example.scopeinspector.ui.components.VersionFooter
 import com.example.scopeinspector.ui.theme.ScopeInspectorTheme
 
@@ -19,6 +20,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (savedInstanceState == null) {
+            AppShortcuts.registerModuleShortcuts(this)
+            AppShortcuts.offerHomeShortcut(this)
+        }
         setContent {
             ScopeInspectorTheme {
                 Column(modifier = Modifier.fillMaxSize()) {
