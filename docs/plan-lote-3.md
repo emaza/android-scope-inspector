@@ -1,6 +1,6 @@
 # Plan del lote 3: automatización y calidad (CI, formato, cobertura, colaboración)
 
-> **Estado:** aprobado el 2026-10-15; en ejecución, bloque A en curso. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
+> **Estado:** aprobado el 2026-10-15; en ejecución. Bloque A hecho (`fase-ci-evidencias`); siguen B, C y D. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
 
 ## Context
 Los lotes 0-2 dejaron el entorno local, 165 tests y la CI en verde. El lote 3 convierte eso en una red de seguridad automática: que la CI deje **evidencias** cuando algo falla, que el código tenga un **formato y un lint exigibles**, que se **mida la cobertura**, y que las dependencias, los commits y las PR sigan **reglas comprobables**. Ya están hechos `AGENTS.md` y la estrategia de tests (lote 2), así que no entran aquí. Estado de partida (`dev` en `2c51f9c`): un solo workflow `build.yml` (jobs `build`, `guard`, `release`) sin `concurrency` ni `timeout-minutes`; sin informes subidos como artefactos; sin `.editorconfig`, linter ni Dependabot; `gradle.properties` con solo 4 líneas; lint con 6 avisos y 0 errores.
@@ -24,6 +24,7 @@ Archivos: `.github/workflows/build.yml`, `gradle.properties`, `scripts/`.
 4. **`timeout-minutes`**: 25 en `build`, 5 en `guard`, 10 en `release`.
 5. **Caché de Robolectric**: `actions/cache` sobre `~/.m2/repository/org/robolectric` (~200 MB que hoy se descargan en cada ejecución), con la versión de Robolectric del catálogo en la clave.
 6. **Rendimiento de Gradle**: `org.gradle.parallel=true`, `org.gradle.configuration-cache=true` y subir `-Xmx` a 3 GB; **solo se adoptan si** tests, lint y APK pasan en local con la configuration cache y se ve "Configuration cache entry reused". Si algún plugin es incompatible, se deja solo `parallel`.
+6 bis. **`--continue`** en la invocación de Gradle, para que el lint se ejecute aunque falle un test (descubierto en la prueba negativa).
 Verificación: ejecución en verde; y una **prueba negativa** en una rama desechable con un test que falla a propósito, para comprobar que se suben los informes y que el resumen lista el test.
 
 ### B. Calidad de código: formato y lint estricto
