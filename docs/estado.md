@@ -39,6 +39,10 @@ motorola edge 40 neo, Android 15 (API 35), Play Services presente. Se comprobó 
 
 Un solo workflow (`.github/workflows/build.yml`), en `ubuntu-24.04` con JDK 21 y `./gradlew`: jobs `build` (tests de scripts, cálculo de versión, tests, lint, APK y verificación con `aapt2`), `guard` (detecta pushes directos a `main`/`dev`) y `release` (tag y GitHub Release solo desde `main`). Tarda 2-6 minutos.
 
+- **Informes**: cada ejecución sube el artefacto `reports-<versión>` (informes HTML/XML de tests y lint, 14 días) y escribe en el resumen del job el recuento de tests y avisos de lint (`scripts/test-summary.py`), también cuando falla. Gradle corre con `--continue` para que el lint se ejecute aunque falle un test.
+- `concurrency`: un push nuevo a una PR o a una rama `fase-*` cancela la ejecución anterior; `main` y `dev` nunca se cancelan. `timeout-minutes`: 25 (`build`), 5 (`guard`), 10 (`release`).
+- Caché de la descarga de Robolectric (~200 MB). Gradle con `org.gradle.parallel` y configuration cache.
+
 ## Entorno
 
 Local, sin Android Studio y sin sudo:
@@ -59,7 +63,7 @@ Depuración USB: `adb` está en `~/Android/Sdk/platform-tools`. Autorizar el ord
 
 1. Promocionar `dev` a `main` (`v0.2.1`).
 2. Módulos pendientes (ver tabla).
-3. **Lote 3 de automatización:** Jacoco e informes de test y lint como artefactos, `concurrency` y `timeout-minutes`, Dependabot (Gradle y Actions), ktlint o detekt con `.editorconfig`, hook `commit-msg` para el formato convencional, plantilla de PR, `org.gradle.parallel` y configuration cache.
+3. **Lote 3 de automatización**, plan en [plan-lote-3.md](plan-lote-3.md): **A** CI (hecho en la PR de `fase-ci-evidencias`), **B** ktlint con Spotless y lint estricto, **C** cobertura con Jacoco, **D** Dependabot, plantilla de PR y hook `commit-msg`.
 4. **Lote 4, a valorar:** capturas de pantalla (con AGP 9.4.1 sería el plugin antiguo), E2E mínimo, R8.
 5. Borrar las ramas `fase-*` ya fusionadas, si el usuario lo pide.
 6. Subir `targetSdk` a 37 y revisar los avisos de lint cuando convenga.
