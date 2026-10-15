@@ -39,7 +39,7 @@ Si entre dos versiones hay varios commits, **gana el mayor** (un `feat` junto a 
 
 ## Cómo se calcula
 
-`scripts/compute-version.sh` lee los commits desde el último tag, decide el bump y escribe `versionName`, `versionCode`, `isRelease`, `tag`, `bump` y `base`. El workflow ([`build.yml`](../.github/workflows/build.yml)) los pasa a Gradle con `-PappVersionName` y `-PappVersionCode`; sin esas propiedades, Gradle usa `0.1.0-dev` y `1`.
+`scripts/compute-version.sh` lee los commits desde el último tag, decide el bump y escribe `versionName`, `versionCode`, `isRelease`, `tag`, `bump` y `base`. El workflow ([`build.yml`](../../.github/workflows/build.yml)) los pasa a Gradle con `-PappVersionName` y `-PappVersionCode`; sin esas propiedades, Gradle usa `0.1.0-dev` y `1`.
 
 Se puede probar en cualquier repo git, sin Android:
 
