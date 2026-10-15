@@ -1,4 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Scope Inspector</string>
+
+    <string name="home_title">Scope Inspector</string>
+    <string name="home_intro">Demo de las APIs más representativas de Android y de los permisos que cada una necesita. Pulsa un módulo para ver su estado y probar la solicitud de permisos.</string>
+
+    <string name="action_back">Atrás</string>
+    <string name="action_request_permissions">Solicitar permisos</string>
+    <string name="action_continue">Continuar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_open_settings">Abrir ajustes</string>
+
+    <string name="permissions_header">Permisos</string>
+    <string name="permission_row">%1$s: %2$s</string>
+
+    <string name="state_granted">Concedido</string>
+    <string name="state_denied">Denegado</string>
+    <string name="state_permanently_denied">Denegado permanentemente</string>
+    <string name="state_not_applicable">No aplica en esta versión de Android</string>
+
+    <string name="note_granted">Todos los permisos están concedidos: la función estará completa.</string>
+    <string name="note_denied">Faltan permisos: la función se ofrecerá en modo reducido en lugar de bloquearse.</string>
+    <string name="note_not_applicable">Esta versión de Android no requiere permisos de ejecución para este módulo.</string>
+
+    <string name="settings_dialog_message">Has denegado este permiso de forma permanente. Para concederlo tienes que activarlo en los ajustes de la aplicación.</string>
+
+    <string name="perm_fine_location">Ubicación precisa</string>
+    <string name="perm_coarse_location">Ubicación aproximada</string>
+    <string name="perm_activity_recognition">Actividad física</string>
+    <string name="perm_camera">Cámara</string>
+    <string name="perm_record_audio">Micrófono</string>
+    <string name="perm_use_biometric">Biometría</string>
+    <string name="perm_post_notifications">Notificaciones</string>
+
+    <string name="module_location_title">Ubicación y actividad</string>
+    <string name="module_location_summary">Muestra tu posición en un mapa y detecta si caminas o vas en vehículo. Usa FusedLocationProviderClient y ActivityRecognitionClient.</string>
+    <string name="module_location_rationale">Necesitamos tu ubicación para dibujar la ruta en el mapa. La actividad física es opcional y solo se usa para etiquetar el tramo (caminando, en vehículo).</string>
+
+    <string name="module_camera_title">Cámara y vídeo</string>
+    <string name="module_camera_summary">Toma una foto o graba un clip corto con CameraX y reprodúcelo con Media3 / ExoPlayer.</string>
+    <string name="module_camera_rationale">Necesitamos la cámara para tomar la foto o el vídeo. El micrófono solo se usa para grabar el audio del vídeo; sin él grabaremos vídeo mudo.</string>
+
+    <string name="module_biometric_title">Biometría</string>
+    <string name="module_biometric_summary">Protege una acción sensible con huella o reconocimiento facial usando BiometricPrompt y Android Keystore.</string>
+    <string name="module_biometric_rationale">La autenticación biométrica la gestiona el sistema; la aplicación solo declara que la utiliza.</string>
+
+    <string name="module_background_title">Segundo plano y notificaciones</string>
+    <string name="module_background_summary">Programa una tarea diferida con WorkManager que avisa con una notificación al terminar.</string>
+    <string name="module_background_rationale">Necesitamos enviarte una notificación cuando la tarea en segundo plano termine. Si lo deniegas, la tarea se ejecuta igual pero sin aviso.</string>
 </resources>
