@@ -3,7 +3,7 @@
 #
 # Activación (una vez por clon):  git config core.hooksPath .githooks
 # Salto puntual, bajo tu responsabilidad:  git push --no-verify
-# Ver docs/009-flujo_de_ramas_y_pr.md.
+# Ver docs/decisiones.md (flujo de ramas y PR).
 #
 # Git pasa por stdin una línea por referencia: <ref local> <sha local> <ref remota> <sha remota>
 protected='^refs/heads/(main|dev)$'

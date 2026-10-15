@@ -3,7 +3,7 @@
 #
 # En un repositorio privado con cuenta gratuita GitHub no puede bloquear los pushes directos,
 # así que se detectan a posteriori: si el commit no tiene ninguna PR asociada, el job falla.
-# Ver docs/009-flujo_de_ramas_y_pr.md.
+# Ver docs/decisiones.md (flujo de ramas y PR).
 #
 # Entorno obligatorio: GITHUB_REPOSITORY, GITHUB_SHA, GITHUB_REF_NAME; y `gh` autenticado (GH_TOKEN).
 # Entorno opcional:    RETRIES (por defecto 6) y DELAY en segundos (por defecto 5): la asociación

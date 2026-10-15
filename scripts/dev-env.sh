@@ -2,7 +2,7 @@
 # Entorno de desarrollo local: JDK 21 y Android SDK instalados en el HOME del usuario (sin sudo).
 #
 # Uso (desde la raíz del repo):   source scripts/dev-env.sh
-# Instalación y detalles:         docs/011-entorno_de_desarrollo_local.md
+# Instalación y detalles:         docs/estado.md (sección Entorno)
 #
 # Rutas por defecto, sobrescribibles con variables de entorno antes de hacer `source`:
 #   DEV_TOOLS     herramientas descargadas (JDK, Gradle)   ~/.local/dev-tools
@@ -16,7 +16,7 @@ export ANDROID_SDK_ROOT="$ANDROID_HOME"
 
 for required in "$JAVA_HOME/bin/java" "$ANDROID_HOME/platforms" "$ANDROID_HOME/build-tools"; do
   if [ ! -e "$required" ]; then
-    echo "dev-env: falta $required; consulta docs/011-entorno_de_desarrollo_local.md" >&2
+    echo "dev-env: falta $required; consulta docs/estado.md (sección Entorno)" >&2
   fi
 done
 

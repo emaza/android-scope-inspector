@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Calcula la versión semántica a partir de los commits convencionales desde el último tag.
 #
-# Reglas (ver docs/006-plan_de_versionado_semantico.md):
+# Reglas (ver docs/decisiones.md, versionado):
 #   feat  -> minor        fix, perf -> patch        tipo! o "BREAKING CHANGE:" -> major
 #   El resto de tipos (docs, chore, ci, test, refactor...) no sube la versión.
 #

@@ -89,7 +89,7 @@ jobs:
 
   # main y dev solo deben cambiar mediante pull request. En un repositorio privado con cuenta
   # gratuita GitHub no puede bloquear el push directo, así que se detecta a posteriori
-  # (ver docs/009-flujo_de_ramas_y_pr.md). No revierte nada: marca el push en rojo.
+  # (ver docs/decisiones.md, flujo de ramas y PR). No revierte nada: marca el push en rojo.
   guard:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
     runs-on: ubuntu-24.04
