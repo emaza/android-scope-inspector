@@ -11,6 +11,29 @@
     <string name="action_cancel">Cancelar</string>
     <string name="action_open_settings">Abrir ajustes</string>
 
+    <string name="map_you_are_here">Estás aquí</string>
+    <string name="location_no_fix_hint">Todavía no hay posición. Pulsa «Mi posición ahora» para situarte en el mapa.</string>
+    <string name="action_locate_now">Mi posición ahora</string>
+    <string name="action_start_tracking">Iniciar rastreo de ruta</string>
+    <string name="action_stop_tracking">Detener rastreo</string>
+    <string name="reading_position">Posición</string>
+    <string name="reading_accuracy">Precisión</string>
+    <string name="reading_access">Tipo de ubicación</string>
+    <string name="reading_speed">Velocidad</string>
+    <string name="reading_distance">Distancia</string>
+    <string name="reading_time">Tiempo</string>
+    <string name="reading_points">Puntos de la ruta</string>
+    <string name="access_precise">Precisa</string>
+    <string name="access_approximate">Aproximada</string>
+    <string name="access_none">Sin permiso</string>
+    <string name="accuracy_value">±%1$d m</string>
+    <string name="no_value">—</string>
+    <string name="msg_no_permission">Sin permiso de ubicación el mapa no puede situarte. Pulsa cualquiera de los botones para solicitarlo.</string>
+    <string name="msg_location_disabled">La ubicación del dispositivo está desactivada. Actívala en los ajustes del móvil para obtener tu posición.</string>
+    <string name="msg_no_fix">No se pudo obtener la posición. Prueba al aire libre o vuelve a intentarlo.</string>
+    <string name="msg_error">Ha ocurrido un error al obtener la ubicación.</string>
+    <string name="msg_low_accuracy">Precisión baja: esa lectura no se añade a la ruta. Con ubicación aproximada no se puede dibujar un recorrido.</string>
+
     <string name="label_feature">Qué aporta</string>
     <string name="label_example">Ejemplo</string>
     <string name="label_how_to_test">Cómo comprobarlo</string>

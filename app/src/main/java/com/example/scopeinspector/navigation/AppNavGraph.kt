@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.scopeinspector.feature.location.LocationScreen
 import com.example.scopeinspector.ui.home.HomeScreen
 import com.example.scopeinspector.ui.module.ModuleScreen
 
@@ -18,7 +19,11 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
         }
         DemoModule.entries.forEach { module ->
             composable(module.route) {
-                ModuleScreen(module = module, onBack = { navController.popBackStack() })
+                val onBack = { navController.popBackStack() }
+                when (module) {
+                    DemoModule.Location -> LocationScreen(onBack = { onBack() })
+                    else -> ModuleScreen(module = module, onBack = { onBack() })
+                }
             }
         }
     }

@@ -115,12 +115,16 @@ class PermissionGroupState internal constructor(
 }
 
 @Composable
-fun rememberPermissionGroup(permissions: List<AppPermission>): PermissionGroupState {
+fun rememberPermissionGroup(
+    permissions: List<AppPermission>,
+    onResult: (PermissionGroupState) -> Unit = {},
+): PermissionGroupState {
     val context = LocalContext.current.applicationContext
     val activity = LocalActivity.current
     val group = remember(permissions, activity) { PermissionGroupState(permissions, context, activity) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         group.refresh()
+        onResult(group)
     }
     SideEffect { group.launch = { names -> launcher.launch(names) } }
     // Al volver de Ajustes el usuario pudo cambiar el permiso.
