@@ -48,6 +48,12 @@ android {
         }
     }
 
+    lint {
+        // Un aviso nuevo falla la compilación en vez de acumularse. Los ignorados a propósito están en lint.xml.
+        warningsAsErrors = true
+        lintConfig = file("lint.xml")
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true

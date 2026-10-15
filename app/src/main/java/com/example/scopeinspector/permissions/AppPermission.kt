@@ -10,7 +10,11 @@ import com.example.scopeinspector.R
  * en la que el permiso existe: por debajo de ella no se pide y el estado es
  * [PermissionState.NotApplicable]. [grantedAtInstall] marca los permisos normales, que
  * Android concede al instalar la app y nunca muestran un diálogo en ejecución.
+ *
+ * `InlinedApi` se suprime a propósito: las constantes de `Manifest.permission` son cadenas que el
+ * compilador copia, y [sinceSdk] ya impide pedir un permiso en una versión donde no existe.
  */
+@Suppress("InlinedApi")
 enum class AppPermission(
     val manifestName: String,
     val sinceSdk: Int,
