@@ -19,10 +19,7 @@ import com.example.scopeinspector.permissions.PermissionState
  * permisos peligrosos.
  */
 @Composable
-fun PermissionStatusList(
-    states: Map<AppPermission, PermissionState>,
-    modifier: Modifier = Modifier,
-) {
+fun PermissionStatusList(states: Map<AppPermission, PermissionState>, modifier: Modifier = Modifier) {
     val hasInstallTimeGrant = states.any { (permission, state) ->
         permission.grantedAtInstall && state == PermissionState.Granted
     }

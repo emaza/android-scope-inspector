@@ -29,6 +29,7 @@ fun RationaleDialog(
 fun PermissionDialogs(group: PermissionGroupState, title: String, rationale: String) {
     when (group.dialog) {
         PermissionDialog.None -> Unit
+
         PermissionDialog.Rationale -> RationaleDialog(
             title = title,
             message = rationale,
@@ -36,6 +37,7 @@ fun PermissionDialogs(group: PermissionGroupState, title: String, rationale: Str
             onConfirm = group::confirmRationale,
             onDismiss = group::dismissDialog,
         )
+
         PermissionDialog.Settings -> RationaleDialog(
             title = title,
             message = stringResource(R.string.settings_dialog_message),

@@ -28,16 +28,16 @@ enum class AppPermission(
         R.string.perm_use_biometric,
         grantedAtInstall = true,
     ),
-    PostNotifications(Manifest.permission.POST_NOTIFICATIONS, 33, R.string.perm_post_notifications);
+    PostNotifications(Manifest.permission.POST_NOTIFICATIONS, 33, R.string.perm_post_notifications),
+    ;
 
     fun isApplicable(sdkInt: Int = Build.VERSION.SDK_INT): Boolean = sdkInt >= sinceSdk
 
     /** Texto del estado; un permiso normal concedido se muestra como "Concedido al instalar". */
     @StringRes
-    fun stateLabelRes(state: PermissionState): Int =
-        if (grantedAtInstall && state == PermissionState.Granted) {
-            R.string.state_granted_at_install
-        } else {
-            state.labelRes()
-        }
+    fun stateLabelRes(state: PermissionState): Int = if (grantedAtInstall && state == PermissionState.Granted) {
+        R.string.state_granted_at_install
+    } else {
+        state.labelRes()
+    }
 }

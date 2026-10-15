@@ -43,8 +43,7 @@ private val LocationPermissions = listOf(AppPermission.FineLocation, AppPermissi
 
 private enum class LocationAction { LocateOnce, StartTracking }
 
-private fun PermissionGroupState.hasPreciseAccess() =
-    states[AppPermission.FineLocation] == PermissionState.Granted
+private fun PermissionGroupState.hasPreciseAccess() = states[AppPermission.FineLocation] == PermissionState.Granted
 
 private fun PermissionGroupState.hasLocationAccess() =
     hasPreciseAccess() || states[AppPermission.CoarseLocation] == PermissionState.Granted

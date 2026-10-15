@@ -24,8 +24,7 @@ object RouteMath {
     /** Por encima de este error (típico de una ubicación aproximada) la lectura no se usa para la ruta. */
     const val MAX_ROUTE_ACCURACY_METERS = 50f
 
-    fun isUsableForRoute(accuracyMeters: Float): Boolean =
-        accuracyMeters in 0f..MAX_ROUTE_ACCURACY_METERS
+    fun isUsableForRoute(accuracyMeters: Float): Boolean = accuracyMeters in 0f..MAX_ROUTE_ACCURACY_METERS
 
     /** Distancia sobre la superficie terrestre (fórmula de haversine). */
     fun distanceMeters(from: RoutePoint, to: RoutePoint): Double {

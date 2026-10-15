@@ -36,10 +36,8 @@ data class LocationUiState(
     val message: LocationMessage? = null,
 )
 
-class LocationViewModel(
-    private val source: LocationSource,
-    private val clock: ElapsedClock = SystemElapsedClock,
-) : ViewModel() {
+class LocationViewModel(private val source: LocationSource, private val clock: ElapsedClock = SystemElapsedClock) :
+    ViewModel() {
     private val _state = MutableStateFlow(LocationUiState())
     val state: StateFlow<LocationUiState> = _state.asStateFlow()
 

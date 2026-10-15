@@ -14,9 +14,7 @@ import org.junit.runner.Description
  * Con él, `runTest` comparte el planificador y se controla el tiempo virtual (`advanceTimeBy`).
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-class MainDispatcherRule(
-    val dispatcher: TestDispatcher = StandardTestDispatcher(),
-) : TestWatcher() {
+class MainDispatcherRule(val dispatcher: TestDispatcher = StandardTestDispatcher()) : TestWatcher() {
     override fun starting(description: Description) = Dispatchers.setMain(dispatcher)
 
     override fun finished(description: Description) = Dispatchers.resetMain()
