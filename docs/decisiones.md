@@ -44,6 +44,7 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 ## Calidad de código
 - **Formato: ktlint con Spotless** (`./gradlew spotlessApply` / `spotlessCheck`, este último en la CI). No detekt: su versión estable (1.23.8) apunta a Kotlin 2.0 y el proyecto usa 2.4. Estilo `android_studio` con comas finales, definido en `build.gradle.kts` porque Spotless no lee `ktlint_code_style` de `.editorconfig` (sí `max_line_length`, 120).
 - **Lint estricto:** `warningsAsErrors = true`; lo que se ignora a propósito está en `app/lint.xml` con su motivo (`OldTargetApi`, `ReportShortcutUsage`, y los avisos de versiones nuevas, que son cosa de Dependabot). `InlinedApi` se suprime en `AppPermission` porque `sinceSdk` ya condiciona el uso.
+- **Cobertura con Jacoco 0.8.15** (tests locales, incluidos los de Robolectric: necesitan `isIncludeNoLocationClasses` y excluir `jdk.internal.*`). El resumen (`scripts/coverage-summary.py`) deja fuera lo generado y `RouteMap`. **Trinquete:** la CI falla si las líneas bajan del mínimo de `app/coverage-min.txt` (85 %, medido 87,1 %); el mínimo solo se sube.
 - Reglas de copia de seguridad (`data_extraction_rules.xml`, `backup_rules.xml`): se excluye todo, coherente con `allowBackup="false"`.
 
 ## Entorno de desarrollo

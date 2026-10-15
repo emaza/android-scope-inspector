@@ -35,6 +35,7 @@ jobs:
           bash scripts/test-check-pr-merge.sh
           bash scripts/test-pre-push-hook.sh
           bash scripts/test-test-summary.sh
+          bash scripts/test-coverage-summary.sh
 
       - name: Compute version
         id: version
@@ -78,7 +79,7 @@ jobs:
           VERSION_NAME: ${{ steps.version.outputs.versionName }}
           VERSION_CODE: ${{ steps.version.outputs.versionCode }}
         run: >
-          ./gradlew spotlessCheck testDebugUnitTest lintDebug assembleDebug --stacktrace --continue
+          ./gradlew spotlessCheck testDebugUnitTest createDebugUnitTestCoverageReport lintDebug assembleDebug --stacktrace --continue
           "-PappVersionName=$VERSION_NAME" "-PappVersionCode=$VERSION_CODE"
 
       # También cuando algo falla: es justo cuando hace falta el informe.
@@ -86,7 +87,12 @@ jobs:
         if: always()
         run: python3 -I scripts/test-summary.py >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload test and lint reports
+      # Falla si la cobertura de líneas baja del mínimo de app/coverage-min.txt (solo se sube, nunca se baja).
+      - name: Coverage summary and minimum
+        if: always()
+        run: python3 -I scripts/coverage-summary.py --min-file app/coverage-min.txt | tee -a "$GITHUB_STEP_SUMMARY"; test "${PIPESTATUS[0]}" -eq 0
+
+      - name: Upload test, lint and coverage reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -97,6 +103,7 @@ jobs:
             app/build/reports/lint-results-debug.html
             app/build/reports/lint-results-debug.xml
             app/build/reports/lint-results-debug.sarif
+            app/build/reports/coverage/
           retention-days: 14
           if-no-files-found: warn
 

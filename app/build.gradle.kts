@@ -1,4 +1,5 @@
 import java.time.Duration
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 
 plugins {
     alias(libs.plugins.android.application)
@@ -24,6 +25,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Cobertura de los tests locales: createDebugUnitTestCoverageReport.
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
         }
@@ -32,6 +37,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    testCoverage {
+        jacocoVersion = "0.8.15"
     }
 
     testOptions {
@@ -45,6 +54,11 @@ android {
                 "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
                 "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
             )
+            // Con Robolectric, Jacoco necesita incluir las clases sin ubicación y dejar fuera las del JDK.
+            test.extensions.configure<JacocoTaskExtension> {
+                isIncludeNoLocationClasses = true
+                excludes = listOf("jdk.internal.*")
+            }
         }
     }
 

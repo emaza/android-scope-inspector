@@ -1,6 +1,6 @@
 # Plan del lote 3: automatización y calidad (CI, formato, cobertura, colaboración)
 
-> **Estado:** aprobado el 2026-10-15; en ejecución. Bloques A y B hechos; siguen C y D. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
+> **Estado:** aprobado el 2026-10-15; en ejecución. Bloques A, B y C hechos; sigue D. Estado general del proyecto: [estado.md](estado.md). Decisiones vigentes: [decisiones.md](decisiones.md).
 
 ## Context
 Los lotes 0-2 dejaron el entorno local, 165 tests y la CI en verde. El lote 3 convierte eso en una red de seguridad automática: que la CI deje **evidencias** cuando algo falla, que el código tenga un **formato y un lint exigibles**, que se **mida la cobertura**, y que las dependencias, los commits y las PR sigan **reglas comprobables**. Ya están hechos `AGENTS.md` y la estrategia de tests (lote 2), así que no entran aquí. Estado de partida (`dev` en `2c51f9c`): un solo workflow `build.yml` (jobs `build`, `guard`, `release`) sin `concurrency` ni `timeout-minutes`; sin informes subidos como artefactos; sin `.editorconfig`, linter ni Dependabot; `gradle.properties` con solo 4 líneas; lint con 6 avisos y 0 errores.
@@ -42,6 +42,7 @@ Archivos: `app/build.gradle.kts`, `scripts/coverage-summary.py`, `.github/workfl
 2. **Compatibilidad con Robolectric**: `isIncludeNoLocationClasses = true` y `excludes = ["jdk.internal.*"]` en las tareas de test; sin esto, Jacoco da cobertura vacía o errores con Robolectric y JDK 21.
 3. **Exclusiones** del informe: `BuildConfig`, `R`, `ComposableSingletons*`, y `RouteMap` (osmdroid sin test, ya documentado como hueco).
 4. `scripts/coverage-summary.py` extrae del XML el porcentaje de líneas/ramas, por paquete y total, lo escribe en el resumen del job y sube el HTML con los demás informes.
+**Nota de ejecución:** medido 87,1 % de líneas y 74 % de ramas (80 % de líneas con `RouteMap`); el umbral se fijó ya en el mismo bloque, 85 % en `app/coverage-min.txt`.
 5. **Sin umbral al principio.** Con el valor medido (se espera por encima del 60 % en la lógica y bastante menos en UI), se añade en un paso posterior un umbral de tipo trinquete (el mínimo sube y nunca baja) en el propio script, con margen de 2 puntos.
 Verificación: informe generado en local, con cifras coherentes con lo que sabemos (la lógica pura casi completa, `RouteMap` excluido); mismo resultado en CI.
 
