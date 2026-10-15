@@ -23,6 +23,9 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 - Ramas de trabajo `fase-*`, siempre desde `dev`. `main` = releases con tag; `dev` = integración.
 - El repo es **privado con cuenta gratuita**: GitHub no permite protección de ramas. Se hace cumplir por convención: job `guard` en CI (marca en rojo un push directo a `main`/`dev` y bloquea la release; no revierte) y hook local `.githooks/pre-push` (`git config core.hooksPath .githooks`; se salta con `--no-verify`).
 - **Commits convencionales**, tipo en inglés y descripción en español, con `Co-Authored-By` al final.
+- **Hook `commit-msg`** (mismo `core.hooksPath`): rechaza asuntos sin `tipo(ámbito)!: descripción`; deja pasar los `Merge`, `Revert` y `fixup!` que genera git. Las reglas (tipos y subida de versión) están en `scripts/conventional-commits.sh`, única fuente de verdad que cargan `compute-version.sh`, el hook y `check-commit-format.sh`. En las PR, la CI lista en el resumen y como aviso los commits sin formato (no bloquea).
+- **Dependabot** (`.github/dependabot.yml`): Gradle y GitHub Actions, semanal (lunes), hacia `dev`, máx. 5 PR abiertas, agrupadas (androidx, kotlin, test), prefijo `build(deps)` / `ci(deps)` (no suben versión). Ignora los saltos **mayores** de AGP y Kotlin: van acoplados y se suben a mano.
+- Hay plantilla de PR (`.github/pull_request_template.md`).
 - Comandos de una fase: rama → commits → `git push -u origin <rama>` → `gh pr create --base dev` → `gh pr checks --watch` → `gh pr merge <n> --merge`. Para una release, PR de `dev` a `main`.
 
 ## Versionado (`scripts/compute-version.sh`)
