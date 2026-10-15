@@ -20,19 +20,17 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
- * Acceso a FusedLocationProviderClient. Quien lo llama es responsable de haber comprobado
- * antes que hay permiso de ubicación (fina o aproximada).
+ * Implementación de [LocationSource] sobre FusedLocationProviderClient. Quien la llama es
+ * responsable de haber comprobado antes que hay permiso de ubicación (fina o aproximada).
  */
-class LocationRepository(context: Context) {
+class LocationRepository(context: Context) : LocationSource {
     private val client = LocationServices.getFusedLocationProviderClient(context)
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-    /** Falso si el usuario tiene la ubicación del dispositivo desactivada en Ajustes. */
-    fun isLocationEnabled(): Boolean = LocationManagerCompat.isLocationEnabled(locationManager)
+    override fun isLocationEnabled(): Boolean = LocationManagerCompat.isLocationEnabled(locationManager)
 
-    /** Una sola lectura; null si el sistema no pudo obtener ninguna. */
     @SuppressLint("MissingPermission")
-    suspend fun currentFix(precise: Boolean): LocationFix? = suspendCancellableCoroutine { cont ->
+    override suspend fun currentFix(precise: Boolean): LocationFix? = suspendCancellableCoroutine { cont ->
         val cancellation = CancellationTokenSource()
         cont.invokeOnCancellation { cancellation.cancel() }
         client.getCurrentLocation(priority(precise), cancellation.token)
@@ -40,9 +38,8 @@ class LocationRepository(context: Context) {
             .addOnFailureListener { error -> cont.resumeWithException(error) }
     }
 
-    /** Lecturas continuas mientras se recoja el flujo. */
     @SuppressLint("MissingPermission")
-    fun fixes(precise: Boolean): Flow<LocationFix> = callbackFlow {
+    override fun fixes(precise: Boolean): Flow<LocationFix> = callbackFlow {
         val request = LocationRequest.Builder(priority(precise), UPDATE_INTERVAL_MS)
             .setMinUpdateDistanceMeters(MIN_DISTANCE_METERS)
             .build()

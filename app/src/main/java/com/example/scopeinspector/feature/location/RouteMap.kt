@@ -40,11 +40,7 @@ private const val OLD_TILE_CACHE_DIR = "osmdroid"
  */
 @SuppressLint("ClickableViewAccessibility")
 @Composable
-fun RouteMap(
-    current: RoutePoint?,
-    route: List<RoutePoint>,
-    modifier: Modifier = Modifier,
-) {
+fun RouteMap(current: RoutePoint?, route: List<RoutePoint>, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val routeColor = MaterialTheme.colorScheme.primary.toArgb()

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- Subir targetSdk exige revisar los cambios de comportamiento de cada versión de Android;
+         se hará a propósito (ver docs/estado.md, próximos pasos), no por un aviso de lint. -->
+    <issue id="OldTargetApi" severity="ignore" />
+
+    <!-- Mejora de ordenación de atajos con ShortcutManager.reportShortcutUsed; no es un fallo. -->
+    <issue id="ReportShortcutUsage" severity="ignore" />
+
+    <!-- Las versiones nuevas de dependencias las propone Dependabot (PR), no la CI. -->
+    <issue id="NewerVersionAvailable" severity="ignore" />
+    <issue id="GradleDependency" severity="ignore" />
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+</lint>

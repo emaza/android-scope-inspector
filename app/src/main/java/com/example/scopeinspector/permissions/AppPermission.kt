@@ -10,7 +10,11 @@ import com.example.scopeinspector.R
  * en la que el permiso existe: por debajo de ella no se pide y el estado es
  * [PermissionState.NotApplicable]. [grantedAtInstall] marca los permisos normales, que
  * Android concede al instalar la app y nunca muestran un diálogo en ejecución.
+ *
+ * `InlinedApi` se suprime a propósito: las constantes de `Manifest.permission` son cadenas que el
+ * compilador copia, y [sinceSdk] ya impide pedir un permiso en una versión donde no existe.
  */
+@Suppress("InlinedApi")
 enum class AppPermission(
     val manifestName: String,
     val sinceSdk: Int,
@@ -28,16 +32,16 @@ enum class AppPermission(
         R.string.perm_use_biometric,
         grantedAtInstall = true,
     ),
-    PostNotifications(Manifest.permission.POST_NOTIFICATIONS, 33, R.string.perm_post_notifications);
+    PostNotifications(Manifest.permission.POST_NOTIFICATIONS, 33, R.string.perm_post_notifications),
+    ;
 
     fun isApplicable(sdkInt: Int = Build.VERSION.SDK_INT): Boolean = sdkInt >= sinceSdk
 
     /** Texto del estado; un permiso normal concedido se muestra como "Concedido al instalar". */
     @StringRes
-    fun stateLabelRes(state: PermissionState): Int =
-        if (grantedAtInstall && state == PermissionState.Granted) {
-            R.string.state_granted_at_install
-        } else {
-            state.labelRes()
-        }
+    fun stateLabelRes(state: PermissionState): Int = if (grantedAtInstall && state == PermissionState.Granted) {
+        R.string.state_granted_at_install
+    } else {
+        state.labelRes()
+    }
 }

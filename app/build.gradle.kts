@@ -1,3 +1,6 @@
+import java.time.Duration
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -22,6 +25,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Cobertura de los tests locales: createDebugUnitTestCoverageReport.
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
         }
@@ -30,6 +37,35 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    testCoverage {
+        jacocoVersion = "0.8.15"
+    }
+
+    testOptions {
+        // Robolectric necesita los recursos y el manifest reales para los tests de UI.
+        unitTests.isIncludeAndroidResources = true
+        // Red de seguridad: un test colgado (p. ej. un bucle con delay en coroutines) no debe bloquear la CI.
+        unitTests.all { test ->
+            test.timeout.set(Duration.ofMinutes(5))
+            // Robolectric accede a internos del JDK (FileDescriptor, SharedSecrets) que Java 17+ encapsula.
+            test.jvmArgs(
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+                "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+            )
+            // Con Robolectric, Jacoco necesita incluir las clases sin ubicación y dejar fuera las del JDK.
+            test.extensions.configure<JacocoTaskExtension> {
+                isIncludeNoLocationClasses = true
+                excludes = listOf("jdk.internal.*")
+            }
+        }
+    }
+
+    lint {
+        // Un aviso nuevo falla la compilación en vez de acumularse. Los ignorados a propósito están en lint.xml.
+        warningsAsErrors = true
+        lintConfig = file("lint.xml")
     }
 
     buildFeatures {
@@ -54,4 +90,12 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.navigation.testing)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

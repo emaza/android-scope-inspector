@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Calcula la versión semántica a partir de los commits convencionales desde el último tag.
 #
-# Reglas (ver docs/006-plan_de_versionado_semantico.md):
+# Reglas (ver docs/decisiones.md, versionado):
 #   feat  -> minor        fix, perf -> patch        tipo! o "BREAKING CHANGE:" -> major
 #   El resto de tipos (docs, chore, ci, test, refactor...) no sube la versión.
 #
@@ -27,8 +27,12 @@ if ! [[ "$build" =~ ^[0-9]+$ ]]; then
   exit 1
 fi
 
-# Base: tag estable más cercano alcanzable desde HEAD; sin tags, 0.1.0 y se mira todo el historial.
-if base_tag=$(git describe --tags --abbrev=0 --match 'v[0-9]*' HEAD 2>/dev/null); then
+# Base: el tag estable vX.Y.Z más alto del repositorio (se ignoran los rc y similares); sin tags,
+# 0.1.0 y se mira todo el historial. No se exige que el tag esté en el historial de la rama: al
+# promocionar dev a main con un merge commit, el tag queda en ese commit y dev no lo contiene, pero
+# los commits ya promocionados sí son ancestros del tag y `tag..HEAD` solo deja los posteriores.
+base_tag=$(git tag --list 'v[0-9]*' --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)
+if [[ -n "$base_tag" ]]; then
   base="${base_tag#v}"
   range="${base_tag}..HEAD"
 else
@@ -42,32 +46,18 @@ if ! [[ "$base" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 fi
 IFS=. read -r major minor patch <<<"$base"
 
-rank() {
-  case "$1" in
-    major) echo 3 ;;
-    minor) echo 2 ;;
-    patch) echo 1 ;;
-    *) echo 0 ;;
-  esac
-}
+# Los tipos y la regla de subida de versión están en conventional-commits.sh (también las usa el hook commit-msg).
+# shellcheck source=scripts/conventional-commits.sh
+source "$(dirname "${BASH_SOURCE[0]}")/conventional-commits.sh"
 
-commit_re='^(feat|fix|perf|refactor|docs|style|test|build|ci|chore|revert)(\([^)]+\))?(!)?:[[:space:]]'
 bump=none
 while IFS= read -r -d $'\x1e' record; do
   subject="${record%%$'\x1f'*}"
   body="${record#*$'\x1f'}"
   subject="${subject#"${subject%%[![:space:]]*}"}" # git separa los registros con un salto de línea
-  [[ $subject =~ $commit_re ]] || continue
-  type="${BASH_REMATCH[1]}"
-  level=none
-  case "$type" in
-    feat) level=minor ;;
-    fix | perf) level=patch ;;
-  esac
-  if [[ -n "${BASH_REMATCH[3]}" ]] || printf '%s' "$body" | grep -qE '^BREAKING[ -]CHANGE:'; then
-    level=major
-  fi
-  if (($(rank "$level") > $(rank "$bump"))); then
+  [[ $subject =~ $CC_SUBJECT_RE ]] || continue
+  level=$(cc_bump_level "${BASH_REMATCH[1]}" "${BASH_REMATCH[3]}" "$body")
+  if (($(cc_rank "$level") > $(cc_rank "$bump"))); then
     bump="$level"
   fi
 done < <(git log --format='%s%x1f%b%x1e' "$range")

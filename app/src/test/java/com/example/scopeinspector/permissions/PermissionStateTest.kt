@@ -77,4 +77,33 @@ class PermissionStateTest {
             aggregatePermissionState(listOf(PermissionState.Granted, PermissionState.Denied)),
         )
     }
+
+    @Test
+    fun aggregateOfDeniedAndNotApplicableIsDenied() {
+        assertEquals(
+            PermissionState.Denied,
+            aggregatePermissionState(listOf(PermissionState.Denied, PermissionState.NotApplicable)),
+        )
+    }
+
+    @Test
+    fun aggregateOfPermanentlyDeniedAndNotApplicableIsPermanentlyDenied() {
+        assertEquals(
+            PermissionState.PermanentlyDenied,
+            aggregatePermissionState(listOf(PermissionState.PermanentlyDenied, PermissionState.NotApplicable)),
+        )
+    }
+
+    @Test
+    fun grantedWinsEvenIfItWasRequestedBeforeAndRationaleIsOff() {
+        assertEquals(
+            PermissionState.Granted,
+            resolvePermissionState(
+                applicable = true,
+                granted = true,
+                requestedBefore = true,
+                shouldShowRationale = false,
+            ),
+        )
+    }
 }

@@ -150,6 +150,44 @@ out=$(version main 20)
 expect "se usa el tag más reciente como base" "$out" versionName "1.1.1"
 expect "se usa el tag más reciente como base: base" "$out" base "1.1.0"
 
+# --- el tag puede no estar en el historial de la rama -------------------------------------------
+# Caso real: dev se promociona a main con un merge commit; el tag queda en ese merge commit, que
+# dev no contiene. La base debe seguir siendo ese tag, y solo cuentan los commits posteriores.
+new_repo
+git checkout -q -b dev
+commit "feat: ya incluido en la release"
+git checkout -q main
+git merge -q --no-ff dev -m "Merge pull request #1 from emaza/dev"
+git tag v1.0.0
+git checkout -q dev
+commit "fix: cambio posterior a la release"
+out=$(version dev 21)
+expect "tag en un merge commit que la rama no contiene: se usa como base" "$out" base "1.0.0"
+expect "tag que la rama no contiene: solo cuentan los commits posteriores" "$out" versionName "1.0.1-dev.21"
+expect "tag que la rama no contiene: el feat anterior no vuelve a contar" "$out" bump "patch"
+
+# --- qué tag manda --------------------------------------------------------------------------
+new_repo
+git tag v1.10.0
+commit "fix: algo"
+git tag v1.9.0
+commit "fix: otro"
+out=$(version main 22)
+expect "el tag más alto manda por versión, no por orden de creación ni alfabético" "$out" base "1.10.0"
+
+new_repo
+git tag v1.0.0-rc1
+commit "feat: algo"
+out=$(version main 23)
+expect "los tags que no son vX.Y.Z (rc) se ignoran" "$out" base "0.1.0"
+
+new_repo
+git tag v1.0.0-rc1
+git tag v1.0.0
+commit "fix: algo"
+out=$(version main 24)
+expect "con un rc y una estable, manda la estable" "$out" versionName "1.0.1"
+
 # --- GITHUB_OUTPUT --------------------------------------------------------------------------
 new_repo
 git tag v1.2.3

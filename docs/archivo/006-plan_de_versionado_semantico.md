@@ -13,7 +13,7 @@ Hoy la versión está escrita a mano en `app/build.gradle.kts` (`versionName = "
 ## Diseño
 
 **Cálculo de versión** (`scripts/compute-version.sh`, bash + git, sin dependencias):
-1. Base = tag `v*` más cercano alcanzable desde HEAD (`git describe --tags --abbrev=0 --match 'v[0-9]*'`); si no hay tags, base `0.1.0` y se examina todo el historial (los commits antiguos no son convencionales, así que no cuentan).
+1. Base = tag estable `vX.Y.Z` más alto del repositorio (`git tag --list 'v[0-9]*' --sort=-version:refname`, sin rc); si no hay tags, base `0.1.0` y se examina todo el historial (los commits antiguos no son convencionales, así que no cuentan). *(Corregido tras la primera release: el diseño original usaba el tag más cercano alcanzable con `git describe`, que `dev` no ve cuando el tag cae en un merge commit; ver [007](007-versionado_semantico.md).)*
 2. Bump = el mayor entre los commits `base..HEAD` (major > minor > patch > ninguno), leyendo asunto y cuerpo.
 3. `main` con bump → versión estable `X.Y.Z` (siguiente a la base) y se publica tag y release. `main` sin bump → no hay release; versión `base+<nº build>` (metadata de build).
 4. Resto de ramas y PRs → siguiente versión (si no hay bump, patch) + `-<rama normalizada>.<nº build>`.
