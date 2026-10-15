@@ -13,8 +13,32 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.versionName }}
+      is_release: ${{ steps.version.outputs.isRelease }}
+      tag: ${{ steps.version.outputs.tag }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # el cálculo de versión necesita el historial y los tags
+
+      - name: Test version script
+        run: bash scripts/test-compute-version.sh
+
+      - name: Compute version
+        id: version
+        env:
+          BRANCH: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || github.ref_name }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          bash scripts/compute-version.sh
+          {
+            echo "### Versión de esta compilación"
+            echo
+            echo "- Versión: \`$(grep -m1 '^versionName=' "$GITHUB_OUTPUT" | cut -d= -f2-)\`"
+            echo "- Build (versionCode): \`$BUILD_NUMBER\`"
+            echo "- Rama: \`$BRANCH\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/setup-java@v6
         with:
@@ -32,10 +56,52 @@ jobs:
           gradle-version: 9.8.1
 
       - name: Unit tests, lint and debug APK
-        run: gradle testDebugUnitTest lintDebug assembleDebug --stacktrace
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.versionName }}
+          VERSION_CODE: ${{ steps.version.outputs.versionCode }}
+        run: >
+          gradle testDebugUnitTest lintDebug assembleDebug --stacktrace
+          "-PappVersionName=$VERSION_NAME" "-PappVersionCode=$VERSION_CODE"
+
+      - name: Verify APK version
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.versionName }}
+          VERSION_CODE: ${{ steps.version.outputs.versionCode }}
+        run: |
+          APK="scope-inspector-${VERSION_NAME}.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "$APK"
+          badging=$("$ANDROID_HOME/build-tools/36.0.0/aapt2" dump badging "$APK" | grep -m1 '^package:')
+          echo "$badging"
+          for expected in "name='io.github.emaza.scopeinspector'" "versionCode='${VERSION_CODE}'" "versionName='${VERSION_NAME}'"; do
+            if [[ "$badging" != *"$expected"* ]]; then
+              echo "::error::El APK no contiene $expected"
+              exit 1
+            fi
+          done
 
       - uses: actions/upload-artifact@v7
         with:
-          name: scope-inspector-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: scope-inspector-${{ steps.version.outputs.versionName }}
+          path: scope-inspector-*.apk
           if-no-files-found: error
+
+  # Solo las pushes a main que suben la versión publican tag y GitHub Release.
+  release:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.outputs.is_release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: scope-inspector-${{ needs.build.outputs.version }}
+
+      - name: Create tag and GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.build.outputs.tag }}
+        run: >
+          gh release create "$TAG" scope-inspector-*.apk
+          --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA"
+          --title "$TAG" --generate-notes

@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Scope Inspector</string>
 
+    <string name="version_label">v%1$s · build %2$d</string>
+
     <string name="home_title">Scope Inspector</string>
     <string name="home_intro">Demo de las APIs más representativas de Android y de los permisos que cada una necesita. Pulsa un módulo para ver su estado y probar la solicitud de permisos.</string>
 

@@ -3,16 +3,22 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// CI calcula la versión con scripts/compute-version.sh y la pasa con
+// -PappVersionName=... -PappVersionCode=...; en local se usan estos valores por defecto.
+val appVersionName = providers.gradleProperty("appVersionName").orElse("0.1.0-dev")
+val appVersionCode = providers.gradleProperty("appVersionCode").map { it.toInt() }.orElse(1)
+
 android {
+    // El namespace (paquete del código) no cambia; solo el identificador de la app instalada.
     namespace = "com.example.scopeinspector"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.scopeinspector"
+        applicationId = "io.github.emaza.scopeinspector"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = appVersionCode.get()
+        versionName = appVersionName.get()
     }
 
     buildTypes {
