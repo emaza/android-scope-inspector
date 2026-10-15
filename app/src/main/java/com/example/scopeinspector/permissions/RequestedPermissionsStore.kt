@@ -7,8 +7,7 @@ import androidx.core.content.edit
 internal class RequestedPermissionsStore(context: Context) {
     private val prefs = context.getSharedPreferences("permission_requests", Context.MODE_PRIVATE)
 
-    fun wasRequested(permission: AppPermission): Boolean =
-        prefs.getBoolean(permission.manifestName, false)
+    fun wasRequested(permission: AppPermission): Boolean = prefs.getBoolean(permission.manifestName, false)
 
     fun markRequested(permissions: Collection<AppPermission>) {
         prefs.edit {

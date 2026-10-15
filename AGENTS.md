@@ -16,7 +16,8 @@ Android Scope Inspector: app demo (Kotlin + Jetpack Compose) con cuatro módulos
 
 ```
 source scripts/dev-env.sh     # JDK 21 y Android SDK del HOME del usuario; no toca archivos de perfil
-./gradlew testDebugUnitTest lintDebug assembleDebug
+./gradlew spotlessApply       # formatea el código con ktlint (la CI exige spotlessCheck)
+./gradlew spotlessCheck testDebugUnitTest lintDebug assembleDebug
 ./gradlew --stop              # libera la memoria del daemon al terminar
 ```
 
@@ -24,7 +25,7 @@ Si falta el entorno, o para el uso de `adb` y el `android` CLI: `docs/estado.md`
 
 ## Tests
 
-Antes de subir, `./gradlew testDebugUnitTest` debe estar en verde; los tests de scripts son `bash scripts/test-*.sh`.
+Antes de subir, `./gradlew spotlessCheck testDebugUnitTest lintDebug` debe estar en verde (el lint falla con cualquier aviso nuevo); los tests de scripts son `bash scripts/test-*.sh`.
 
 - Un fallo se arregla con un test que lo reproduce y falla antes del arreglo.
 - Lo que depende de un servicio del sistema se inyecta (interfaz + fake + fábrica manual); no hay framework de DI.

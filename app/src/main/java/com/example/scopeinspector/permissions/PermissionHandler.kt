@@ -82,11 +82,14 @@ class PermissionGroupState internal constructor(
         }
         when (plan) {
             PermissionRequestPlan.NoAction -> Unit
+
             PermissionRequestPlan.OpenSettings -> dialog = PermissionDialog.Settings
+
             is PermissionRequestPlan.ShowRationale -> {
                 pendingRequest = plan.permissions
                 dialog = PermissionDialog.Rationale
             }
+
             is PermissionRequestPlan.Launch -> launchRequest(plan.permissions)
         }
     }

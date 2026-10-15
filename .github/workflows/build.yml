@@ -73,12 +73,12 @@ jobs:
           key: robolectric-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: robolectric-
 
-      - name: Unit tests, lint and debug APK
+      - name: Format check, unit tests, lint and debug APK
         env:
           VERSION_NAME: ${{ steps.version.outputs.versionName }}
           VERSION_CODE: ${{ steps.version.outputs.versionCode }}
         run: >
-          ./gradlew testDebugUnitTest lintDebug assembleDebug --stacktrace --continue
+          ./gradlew spotlessCheck testDebugUnitTest lintDebug assembleDebug --stacktrace --continue
           "-PappVersionName=$VERSION_NAME" "-PappVersionCode=$VERSION_CODE"
 
       # También cuando algo falla: es justo cuando hace falta el informe.

@@ -17,11 +17,7 @@ import com.example.scopeinspector.navigation.DemoModule
  * que funciona (se muestra en la pantalla del módulo, no en la tarjeta de inicio).
  */
 @Composable
-fun ModuleDescription(
-    module: DemoModule,
-    modifier: Modifier = Modifier,
-    showHowToTest: Boolean = false,
-) {
+fun ModuleDescription(module: DemoModule, modifier: Modifier = Modifier, showHowToTest: Boolean = false) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         LabeledText(R.string.label_feature, module.featureRes)
         LabeledText(R.string.label_example, module.exampleRes)

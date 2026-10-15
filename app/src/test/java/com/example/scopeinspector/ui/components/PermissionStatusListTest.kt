@@ -40,7 +40,9 @@ class PermissionStatusListTest {
     fun aGrantedInstallTimePermissionIsShownAsGrantedAtInstallWithTheExplanation() {
         show(mapOf(AppPermission.UseBiometric to PermissionState.Granted))
 
-        composeRule.onNodeWithText(row(AppPermission.UseBiometric, R.string.state_granted_at_install)).assertIsDisplayed()
+        composeRule.onNodeWithText(
+            row(AppPermission.UseBiometric, R.string.state_granted_at_install),
+        ).assertIsDisplayed()
         composeRule.onNodeWithText(string(R.string.install_permission_explanation)).assertIsDisplayed()
     }
 
@@ -62,7 +64,9 @@ class PermissionStatusListTest {
         )
 
         composeRule.onNodeWithText(row(AppPermission.Camera, R.string.state_denied)).assertIsDisplayed()
-        composeRule.onNodeWithText(row(AppPermission.RecordAudio, R.string.state_permanently_denied)).assertIsDisplayed()
+        composeRule.onNodeWithText(
+            row(AppPermission.RecordAudio, R.string.state_permanently_denied),
+        ).assertIsDisplayed()
     }
 
     @Test
