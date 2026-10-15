@@ -36,6 +36,22 @@ jobs:
           bash scripts/test-pre-push-hook.sh
           bash scripts/test-test-summary.sh
           bash scripts/test-coverage-summary.sh
+          bash scripts/test-commit-msg-hook.sh
+
+      # Aviso, no bloqueo: del formato de los commits depende la versión (docs/decisiones.md).
+      - name: Check commit format
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.base_ref }}
+        run: |
+          if ! report=$(bash scripts/check-commit-format.sh "origin/${BASE}..HEAD"); then
+            echo "::warning title=Commits sin formato convencional::Hay commits que no sigue el formato y no contarán para la versión; ver el resumen del job."
+            {
+              echo "### Commits sin formato convencional"
+              echo
+              echo "$report"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Compute version
         id: version
