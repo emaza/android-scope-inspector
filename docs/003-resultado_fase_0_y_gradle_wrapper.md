@@ -53,6 +53,8 @@ El workflow usa `gradle/actions/setup-gradle` con `gradle-version: 9.8.1`. La ac
 
 Ahora mismo no te afecta, porque no tienes entorno local y todo se compila en CI. Se vuelve relevante si instalas Android Studio.
 
+> **Actualización:** el wrapper ya está en el repo, generado con la distribución oficial y con el jar verificado contra el checksum publicado por Gradle. Ver [011](011-entorno_de_desarrollo_local.md).
+
 ### Cómo añadirlo después
 
 - **Desde Android Studio:** al abrir el proyecto, normalmente genera el wrapper o lo ofrece.

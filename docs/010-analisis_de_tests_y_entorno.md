@@ -77,8 +77,8 @@ Cada lote va por su rama `fase-*` y su PR a `dev`, con commits convencionales.
 
 | Lote | Contenido | Estado |
 |---|---|---|
-| **0** | Este documento, corrección del 008 y runner fijado a `ubuntu-24.04` | En esta PR |
-| **1** | Entorno local: JDK 17 en `~/.local`, `android` CLI y SDK, wrapper de Gradle; la CI pasa a usar `./gradlew` | Pendiente |
+| **0** | Este documento, corrección del 008 y runner fijado a `ubuntu-24.04` | **Hecho** (PR #4) |
+| **1** | Entorno local: JDK 17 en `~/.local`, `android` CLI y SDK, wrapper de Gradle; la CI pasa a usar `./gradlew` | **Hecho**, ver [011](011-entorno_de_desarrollo_local.md) |
 | **2** | Testabilidad y tests, ver abajo | Pendiente |
 | **3** | Automatización: Jacoco e informes como artefactos, `concurrency` y `timeout`, Dependabot, ktlint o detekt con `.editorconfig`, hook `commit-msg`, plantilla de PR, `docs/testing.md` y `AGENTS.md` | Pendiente |
 | **4** | A valorar: capturas de pantalla, E2E mínimo con emulador, R8 | Pendiente |
@@ -99,4 +99,4 @@ Cada lote va por su rama `fase-*` y su PR a `dev`, con commits convencionales.
 **Riesgos conocidos:**
 - No se sabe si la versión de Robolectric disponible soporta la API 37 del proyecto; si no, los tests de UI usarían el SDK que sí soporte.
 - Las capturas de pantalla con AGP 9.4.1 usarían el plugin antiguo, que la skill marca como obsoleto; no se actualiza AGP solo por eso.
-- En `fase-*` no hay forma de comprobar el entorno local hasta que el lote 1 esté hecho: hasta entonces la verificación sigue siendo la CI.
+- Con el lote 1 hecho, los tests y el lint se pasan en local antes de subir; la CI sigue siendo la verificación final y la que valida el APK con `aapt2`.
