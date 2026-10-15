@@ -20,11 +20,19 @@ private const val HOME_ROUTE = "home"
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
-    // Con la app ya abierta, un atajo llega como nuevo intent (MainActivity es singleTask) y
-    // Navigation no lo procesa por sí sola: hay que pasárselo.
+    // Con la app ya abierta, un atajo llega como nuevo intent (MainActivity es singleTask). Navigation no
+    // lo procesa por sí sola, y `handleDeepLink` con las flags de un atajo intenta relanzar la tarea
+    // en lugar de navegar. Se resuelve la ruta aquí: siempre queda Home debajo y no se duplica el módulo.
     val activity = LocalActivity.current as? ComponentActivity
     DisposableEffect(activity, navController) {
-        val listener = Consumer<Intent> { intent -> navController.handleDeepLink(intent) }
+        val knownRoutes = DemoModule.entries.map { it.route }
+        val listener = Consumer<Intent> { intent ->
+            val route = ShortcutPolicy.moduleRoute(intent.dataString, knownRoutes) ?: return@Consumer
+            navController.navigate(route) {
+                popUpTo(HOME_ROUTE)
+                launchSingleTop = true
+            }
+        }
         activity?.addOnNewIntentListener(listener)
         onDispose { activity?.removeOnNewIntentListener(listener) }
     }

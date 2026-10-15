@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Entorno de desarrollo local: JDK 17 y Android SDK instalados en el HOME del usuario (sin sudo).
+# Entorno de desarrollo local: JDK 21 y Android SDK instalados en el HOME del usuario (sin sudo).
 #
 # Uso (desde la raíz del repo):   source scripts/dev-env.sh
 # Instalación y detalles:         docs/011-entorno_de_desarrollo_local.md
@@ -10,7 +10,7 @@
 # No modifica ningún archivo de perfil: solo exporta variables en la shell actual.
 
 export DEV_TOOLS="${DEV_TOOLS:-$HOME/.local/dev-tools}"
-export JAVA_HOME="$DEV_TOOLS/jdk-17"
+export JAVA_HOME="$DEV_TOOLS/jdk-21"
 export ANDROID_HOME="${ANDROID_HOME:-$HOME/Android/Sdk}"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 

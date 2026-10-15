@@ -79,7 +79,7 @@ Cada lote va por su rama `fase-*` y su PR a `dev`, con commits convencionales.
 |---|---|---|
 | **0** | Este documento, corrección del 008 y runner fijado a `ubuntu-24.04` | **Hecho** (PR #4) |
 | **1** | Entorno local: JDK 17 en `~/.local`, `android` CLI y SDK, wrapper de Gradle; la CI pasa a usar `./gradlew` | **Hecho**, ver [011](011-entorno_de_desarrollo_local.md) |
-| **2** | Testabilidad y tests, ver abajo | Pendiente |
+| **2** | Testabilidad y tests, ver abajo | **Hecho**, ver [012](012-estrategia_de_tests.md) |
 | **3** | Automatización: Jacoco e informes como artefactos, `concurrency` y `timeout`, Dependabot, ktlint o detekt con `.editorconfig`, hook `commit-msg`, plantilla de PR, `docs/testing.md` y `AGENTS.md` | Pendiente |
 | **4** | A valorar: capturas de pantalla, E2E mínimo con emulador, R8 | Pendiente |
 
