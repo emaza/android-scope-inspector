@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, dev, 'fase-*']
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 
 permissions:
@@ -22,8 +22,11 @@ jobs:
         with:
           fetch-depth: 0 # el cálculo de versión necesita el historial y los tags
 
-      - name: Test version script
-        run: bash scripts/test-compute-version.sh
+      - name: Test repo scripts
+        run: |
+          bash scripts/test-compute-version.sh
+          bash scripts/test-check-pr-merge.sh
+          bash scripts/test-pre-push-hook.sh
 
       - name: Compute version
         id: version
@@ -85,9 +88,27 @@ jobs:
           path: scope-inspector-*.apk
           if-no-files-found: error
 
-  # Solo las pushes a main que suben la versión publican tag y GitHub Release.
+  # main y dev solo deben cambiar mediante pull request. En un repositorio privado con cuenta
+  # gratuita GitHub no puede bloquear el push directo, así que se detecta a posteriori
+  # (ver docs/009-flujo_de_ramas_y_pr.md). No revierte nada: marca el push en rojo.
+  guard:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check the push comes from a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/check-pr-merge.sh
+
+  # Solo las pushes a main que suben la versión y proceden de una PR publican tag y GitHub Release:
+  # un push directo a main (guard en rojo) no publica nada.
   release:
-    needs: build
+    needs: [build, guard]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.build.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     permissions:
