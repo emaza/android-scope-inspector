@@ -31,7 +31,9 @@ Si entre dos versiones hay varios commits, **gana el mayor** (un `feat` junto a 
 | `main`, sin commits que suban versión | `X.Y.Z+<build>` (la última más el número de build) | no |
 | `dev`, `fase-*` y pull requests | `X.Y.Z-<rama>.<build>`, por ejemplo `0.3.0-fase-2-ubicacion.58` | no |
 
-- **Versión base:** el último tag `vX.Y.Z` alcanzable desde el commit. Mientras no haya ninguno, la base es `0.1.0`; el historial anterior a este sistema no usaba commits convencionales y no cuenta.
+- **Versión base:** el tag estable `vX.Y.Z` **más alto** del repositorio (se ignoran `-rc` y similares). Mientras no haya ninguno, la base es `0.1.0`; el historial anterior a este sistema no usaba commits convencionales y no cuenta.
+  - No hace falta que el tag esté en el historial de la rama. Al promocionar `dev` a `main` con merge commit, el tag queda en ese commit y `dev` no lo contiene; aun así sirve de base, y solo cuentan los commits posteriores a él (los ya promocionados son ancestros del tag).
+  - Antes se usaba el tag más cercano alcanzable desde la rama, y `dev` y las ramas `fase-*` seguían calculando sobre 0.1.0 tras la primera release. Está corregido y cubierto por tests.
 - **`versionCode`** (el "build"): el número de ejecución del workflow, que crece en cada push y es único entre ramas. Android lo usa para saber qué instalación es más nueva.
 - **Pre-releases:** en ramas de trabajo sin commits que suban versión se usa el siguiente patch, para que siempre queden por encima de la versión base.
 
@@ -42,7 +44,7 @@ Si entre dos versiones hay varios commits, **gana el mayor** (un `feat` junto a 
 Se puede probar en cualquier repo git, sin Android:
 
 ```
-bash scripts/test-compute-version.sh                       # 27 comprobaciones sobre repos temporales
+bash scripts/test-compute-version.sh                       # 33 comprobaciones sobre repos temporales
 BUILD_NUMBER=58 bash scripts/compute-version.sh            # versión que saldría ahora mismo
 BRANCH=main BUILD_NUMBER=58 bash scripts/compute-version.sh
 ```
