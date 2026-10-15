@@ -16,7 +16,7 @@ Con el entorno, 41 tests pasan en local (0 fallos) y el lint termina sin errores
 
 | Componente | Versión | Ruta | Tamaño | Verificación |
 |---|---|---|---|---|
-| JDK Temurin | 17.0.20.1 | `~/.local/dev-tools/jdk-17` | ~190 MB | sha256 contra el de la API de Adoptium |
+| JDK Temurin | 21.0.12.1 (antes 17; ver nota) | `~/.local/dev-tools/jdk-21` | ~200 MB | sha256 contra el de la API de Adoptium |
 | Gradle (solo para generar el wrapper) | 9.8.1 | `~/.local/dev-tools/gradle-9.8.1` | ~130 MB | sha256 `dce76f55…dc01f` publicado por Gradle |
 | Android CLI | 1.0.16500706 | `~/.local/bin/android` y `~/.android/` | ~5 MB | descargado por HTTPS de `dl.google.com` (no publican checksum) |
 | Android SDK | platform-tools 37.0.1, `platforms/android-37.0`, `build-tools/36.0.0` | `~/Android/Sdk` | ~330 MB | gestor del SDK |
@@ -24,6 +24,8 @@ Con el entorno, 41 tests pasan en local (0 fallos) y el lint termina sin errores
 El wrapper se generó con la distribución verificada, y el `gradle-wrapper.jar` resultante coincide con el checksum que Gradle publica para esa versión (`3b8a2577…8e98`). Es el jar que no pude verificar al principio: el mismatch era del jar del repositorio de Gradle, no del proceso.
 
 No se modificó ningún archivo de perfil (`~/.bashrc` y similares): el instalador oficial del CLI añade una línea al perfil si `~/.local/bin` no está en el `PATH`, aquí ya estaba, y de todas formas se omitió el script y se descargó solo el binario.
+
+> **Nota sobre el JDK:** el lote 1 instaló el JDK 17. Al añadir los tests de UI (lote 2) se vio que **Robolectric exige Java 21 para Android SDK 36** (`Android SDK 36 requires Java 21 (have Java 17)`). El entorno local y la CI pasaron a JDK 21; el bytecode de la app sigue en Java 17. El `jdk-17` de `~/.local/dev-tools` ya no se usa y se puede borrar.
 
 ## Cómo usarlo
 
@@ -42,7 +44,7 @@ source scripts/dev-env.sh          # exporta JAVA_HOME, ANDROID_HOME y PATH solo
 
 Reproducir la instalación en otra máquina (Linux x86_64):
 
-1. Descargar el JDK 17 Temurin y la distribución de Gradle 9.8.1, comprobar sus checksums y descomprimirlos en `~/.local/dev-tools` (el JDK en `jdk-17`).
+1. Descargar el JDK 21 Temurin y la distribución de Gradle 9.8.1, comprobar sus checksums y descomprimirlos en `~/.local/dev-tools` (el JDK en `jdk-21`).
 2. Descargar `https://dl.google.com/android/cli/latest/linux_x86_64/android` a `~/.local/bin/android` y darle permiso de ejecución.
 3. `android sdk install platforms/android-37.0 build-tools/36.0.0 platform-tools`.
 4. `source scripts/dev-env.sh` y `./gradlew testDebugUnitTest`.
