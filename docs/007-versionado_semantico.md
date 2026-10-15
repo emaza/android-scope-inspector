@@ -51,7 +51,7 @@ El workflow ejecuta esos tests antes de compilar.
 
 ## Releases
 
-Al hacer merge a `main` con commits que suben versión, el job `release` crea el tag y la GitHub Release con el APK y las notas generadas. El push de ese tag no lanza otra ejecución. Ojo con el merge:
+Al fusionar una PR en `main` con commits que suben versión, el job `release` crea el tag y la GitHub Release con el APK y las notas generadas. El push de ese tag no lanza otra ejecución. `main` y `dev` solo cambian mediante PR (ver [009](009-flujo_de_ramas_y_pr.md)); un push directo a `main` no publica release. Ojo con el merge:
 
 - **Merge normal:** cuentan los commits de la rama, así que deben ser convencionales.
 - **Squash merge:** cuenta solo el título del PR, que debe ser convencional.
