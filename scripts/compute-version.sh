@@ -27,8 +27,12 @@ if ! [[ "$build" =~ ^[0-9]+$ ]]; then
   exit 1
 fi
 
-# Base: tag estable más cercano alcanzable desde HEAD; sin tags, 0.1.0 y se mira todo el historial.
-if base_tag=$(git describe --tags --abbrev=0 --match 'v[0-9]*' HEAD 2>/dev/null); then
+# Base: el tag estable vX.Y.Z más alto del repositorio (se ignoran los rc y similares); sin tags,
+# 0.1.0 y se mira todo el historial. No se exige que el tag esté en el historial de la rama: al
+# promocionar dev a main con un merge commit, el tag queda en ese commit y dev no lo contiene, pero
+# los commits ya promocionados sí son ancestros del tag y `tag..HEAD` solo deja los posteriores.
+base_tag=$(git tag --list 'v[0-9]*' --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)
+if [[ -n "$base_tag" ]]; then
   base="${base_tag#v}"
   range="${base_tag}..HEAD"
 else
