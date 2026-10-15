@@ -1,15 +1,15 @@
 # Estado actual
 
-Última actualización: 2026-10-15 (`dev` en `6c222d1`). Decisiones vigentes: [decisiones.md](decisiones.md). El detalle histórico está en `archivo/` (no hace falta leerlo para trabajar).
+Última actualización: 2026-10-15 (release `v0.2.1`). Decisiones vigentes: [decisiones.md](decisiones.md). El detalle histórico está en `archivo/` (no hace falta leerlo para trabajar).
 
 ## Versión y ramas
 
 | | |
 |---|---|
-| Última release | `v0.2.0` en `main` (PR #2) |
-| `dev` | compila como `0.2.1-dev.N`; lleva correcciones sin publicar (`fix(location)` ×2, `fix(shortcuts)`) |
-| Pendiente | promocionar `dev` → `main` para sacar `v0.2.1` |
-| Ramas `fase-*` | 9 ya fusionadas y sin borrar en `origin` (su contenido está en `dev`), además de la de esta reorganización |
+| Última release | `v0.2.1` en `main` (PR #15), 2026-10-15 |
+| `dev` | compila como `0.2.2-dev.N` (sin cambios que suban versión desde la release) |
+| Pendiente | nada por promocionar |
+| Ramas | las `fase-*` ya fusionadas se borraron (locales y en `origin`); cada fase nueva sale de `dev`. Dependabot abre PR a `dev` desde ramas `dependabot/*` |
 
 ## Módulos de la app
 
@@ -62,9 +62,8 @@ Depuración USB: `adb` está en `~/Android/Sdk/platform-tools`. Autorizar el ord
 
 ## Próximos pasos
 
-1. Promocionar `dev` a `main` (`v0.2.1`).
+1. Revisar y fusionar las PR de Dependabot (la primera, #16).
 2. Módulos pendientes (ver tabla).
-3. ~~Lote 3 de automatización~~ **hecho** (CI con informes, ktlint y lint estricto, cobertura con mínimo, Dependabot, plantilla de PR y hook `commit-msg`); plan y decisiones en [plan-lote-3.md](plan-lote-3.md). Dependabot solo se activará cuando su configuración llegue a `main` (la lee de la rama por defecto), con la promoción del punto 1; entonces abrirá PR a `dev` los lunes y se fusionan una a una por el flujo normal.
+3. ~~Lote 3 de automatización~~ **hecho** (CI con informes, ktlint y lint estricto, cobertura con mínimo, Dependabot, plantilla de PR y hook `commit-msg`); plan y decisiones en [plan-lote-3.md](plan-lote-3.md). Dependabot, activo desde que su configuración llegó a `main` (la lee de la rama por defecto), abre PR a `dev` los lunes; se fusionan una a una por el flujo normal.
 4. **Lote 4, a valorar:** capturas de pantalla (con AGP 9.4.1 sería el plugin antiguo), E2E mínimo, R8.
-5. Borrar las ramas `fase-*` ya fusionadas, si el usuario lo pide.
-6. Subir `targetSdk` a 37 y revisar los avisos de lint cuando convenga.
+5. Subir `targetSdk` a 37 y revisar los avisos de lint cuando convenga.
