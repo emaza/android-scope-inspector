@@ -1,3 +1,5 @@
+> **Nota:** el plan vigente es [`004-plan_de_fases_detallado.md`](004-plan_de_fases_detallado.md). Este documento queda como referencia histórica.
+
 # Resultado de la Fase 0 y explicación del Gradle Wrapper
 
 ## Resultado de la Fase 0

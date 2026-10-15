@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Rechaza los pushes directos a main y dev: esas ramas solo cambian mediante pull request.
+#
+# Activación (una vez por clon):  git config core.hooksPath .githooks
+# Salto puntual, bajo tu responsabilidad:  git push --no-verify
+# Ver docs/009-flujo_de_ramas_y_pr.md.
+#
+# Git pasa por stdin una línea por referencia: <ref local> <sha local> <ref remota> <sha remota>
+protected='^refs/heads/(main|dev)$'
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if [[ "$remote_ref" =~ $protected ]]; then
+    branch="${remote_ref#refs/heads/}"
+    echo "pre-push: no se permite el push directo a '$branch'; solo se cambia mediante pull request." >&2
+    echo "  1) sube tu rama de trabajo:   git push -u origin <rama>" >&2
+    echo "  2) abre la PR:                gh pr create --base $branch" >&2
+    exit 1
+  fi
+done
+exit 0
