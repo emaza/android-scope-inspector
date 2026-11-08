@@ -31,7 +31,7 @@ motorola edge 40 neo, Android 15 (API 35), Play Services presente. Se comprobó 
 
 ## Tests y calidad
 
-- **207 tests** JVM + Robolectric (0 fallos) y comprobaciones de scripts bash.
+- **208 tests** JVM + Robolectric (0 fallos) y comprobaciones de scripts bash.
 - **Cobertura de líneas 91,2 %** (ramas 72 %, sin `RouteMap` ni código generado). Lo peor: `shortcuts` 15 % (`AppShortcuts` sin test), `MainActivity` 0 % y `LocationRepository` (Play Services). La CI exige un mínimo (`app/coverage-min.txt`, 88 %).
 - Comprobación de mutaciones: 8 errores introducidos a mano, los 8 detectados.
 - Huecos conocidos (ver cobertura): el mapa real (osmdroid) no se prueba (se sustituye en los tests), `AppShortcuts` solo en su lógica, sin tests instrumentados ni de capturas. Robolectric corre en API 36 y el móvil lleva API 35.

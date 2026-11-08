@@ -23,9 +23,14 @@ object ClipboardProbe {
         return ClipboardReading.Described(hasClip = clipboard?.hasPrimaryClip() == true, mimeTypes = mimeTypes)
     }
 
+    /**
+     * Lee el primer elemento sin abrir nada: si es un URI (`content://...`) se muestra el URI.
+     * `ClipData.Item.coerceToText` leería entero el contenido del proveedor en el hilo de la interfaz,
+     * sin límite de tamaño, y eso podría congelar la app con un fichero lento o enorme.
+     */
     fun read(context: Context): ClipboardReading.Read {
-        val clip = context.getSystemService<ClipboardManager>()?.primaryClip
-        val text = clip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString()
+        val item = context.getSystemService<ClipboardManager>()?.primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)
+        val text = item?.text?.toString() ?: item?.htmlText ?: item?.uri?.toString() ?: item?.intent?.toUri(0)
         return truncate(text)
     }
 
