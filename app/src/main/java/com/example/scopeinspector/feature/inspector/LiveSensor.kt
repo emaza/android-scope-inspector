@@ -6,11 +6,11 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.getSystemService
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.example.scopeinspector.R
 import java.util.Locale
 
@@ -41,14 +41,15 @@ enum class LiveSensor(val type: Int, @StringRes val labelRes: Int, val unit: Str
 }
 
 /**
- * Escucha los sensores presentes mientras la pantalla está visible y devuelve la última lectura de
- * cada uno. Ritmo `SENSOR_DELAY_UI`: por encima de 200 Hz Android exige `HIGH_SAMPLING_RATE_SENSORS`.
+ * Escucha los sensores presentes solo mientras la pantalla está en primer plano (RESUMED): al pausar
+ * la app se dejan de escuchar, aunque la composición siga viva, y se vuelven a registrar al volver.
+ * Devuelve la última lectura de cada uno. Ritmo `SENSOR_DELAY_UI`: por encima de 200 Hz Android exige `HIGH_SAMPLING_RATE_SENSORS`.
  */
 @Composable
 fun rememberLiveSensorReadings(): Map<LiveSensor, FloatArray> {
     val context = LocalContext.current
     val readings = remember { mutableStateMapOf<LiveSensor, FloatArray>() }
-    DisposableEffect(context) {
+    LifecycleResumeEffect(context) {
         val manager = context.getSystemService<SensorManager>()
         val listeners = LiveSensor.entries.mapNotNull { live ->
             val sensor = manager?.getDefaultSensor(live.type) ?: return@mapNotNull null
@@ -62,7 +63,7 @@ fun rememberLiveSensorReadings(): Map<LiveSensor, FloatArray> {
             manager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI)
             listener
         }
-        onDispose { listeners.forEach { manager?.unregisterListener(it) } }
+        onPauseOrDispose { listeners.forEach { manager?.unregisterListener(it) } }
     }
     return readings
 }
