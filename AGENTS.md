@@ -10,7 +10,7 @@ Guía para agentes y colaboradores. Solo lo imprescindible; el resto está en `d
 
 ## Qué es
 
-Android Scope Inspector: app demo (Kotlin + Jetpack Compose) con cuatro módulos que muestran de forma práctica qué se puede hacer con cada permiso de Android: ubicación y actividad, cámara y vídeo, biometría, segundo plano y notificaciones. Cada módulo debe ser un uso real del permiso, con algo que el usuario pueda ver y comprobar, no solo texto. Qué módulos están hechos y cuáles faltan: `docs/estado.md`.
+Android Scope Inspector: app demo (Kotlin + Jetpack Compose), equivalente Android de Browser Scope Inspector: un **Inspector del dispositivo** con todo lo que una app lee sin pedir permisos, y cuatro módulos que muestran de forma práctica qué se puede hacer con cada permiso de Android: ubicación y actividad, cámara y vídeo, biometría, segundo plano y notificaciones. Cada módulo debe ser un uso real del permiso, con algo que el usuario pueda ver y comprobar, no solo texto. Qué módulos están hechos y cuáles faltan: `docs/estado.md`.
 
 ## Entorno
 

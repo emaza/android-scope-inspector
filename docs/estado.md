@@ -1,6 +1,6 @@
 # Estado actual
 
-Última actualización: 2026-10-15 (release `v0.2.1`). Decisiones vigentes: [decisiones.md](decisiones.md). El detalle histórico está en `archivo/` (no hace falta leerlo para trabajar).
+Última actualización: 2026-11-08 (Inspector del dispositivo, sin publicar en `dev`). Decisiones vigentes: [decisiones.md](decisiones.md). El detalle histórico está en `archivo/` (no hace falta leerlo para trabajar).
 
 ## Versión y ramas
 
@@ -15,6 +15,7 @@
 
 | Módulo | Estado |
 |---|---|
+| **Inspector del dispositivo** | Hecho (equivalente a Browser Scope Inspector). Lo que cualquier app lee **sin permisos en ejecución**: hardware, sistema, pantalla, red, región y accesibilidad, identificadores (`ANDROID_ID`, apps visibles, huella combinada SHA-256), sensores en vivo y portapapeles (descripción pasiva y lectura al pulsar). Tarjeta destacada en inicio, ruta `inspector` (sin atajo ni deep link). Ideas para ampliarlo: biometría del comportamiento (toques y gestos), lista completa de sensores, apps instaladas con `<queries>` |
 | **Ubicación** | Mapa de OpenStreetMap con tu posición y la ruta en vivo (distancia, velocidad, tiempo, precisión). **Falta** la detección de actividad física (`ActivityRecognitionClient`, interruptor opcional con `ACTIVITY_RECOGNITION`) |
 | **Cámara y vídeo** | Solo pantalla genérica de permisos. Pendiente: CameraX (vista previa, foto, vídeo) y Media3 para reproducir |
 | **Biometría** | Solo pantalla genérica. Pendiente: `BiometricPrompt` + Keystore (nota secreta). Exigirá pasar `MainActivity` a `FragmentActivity` |
@@ -30,8 +31,8 @@ motorola edge 40 neo, Android 15 (API 35), Play Services presente. Se comprobó 
 
 ## Tests y calidad
 
-- **165 tests** JVM + Robolectric (0 fallos) y comprobaciones de scripts bash.
-- **Cobertura de líneas 87,1 %** (ramas 74 %, sin `RouteMap` ni código generado). Lo peor: `shortcuts` 15 % (`AppShortcuts` sin test), `MainActivity` 0 % y `LocationRepository` (Play Services). La CI exige un mínimo (`app/coverage-min.txt`, 85 %).
+- **206 tests** JVM + Robolectric (0 fallos) y comprobaciones de scripts bash.
+- **Cobertura de líneas 90,9 %** (ramas 71 %, sin `RouteMap` ni código generado). Lo peor: `shortcuts` 15 % (`AppShortcuts` sin test), `MainActivity` 0 % y `LocationRepository` (Play Services). La CI exige un mínimo (`app/coverage-min.txt`, 88 %).
 - Comprobación de mutaciones: 8 errores introducidos a mano, los 8 detectados.
 - Huecos conocidos (ver cobertura): el mapa real (osmdroid) no se prueba (se sustituye en los tests), `AppShortcuts` solo en su lógica, sin tests instrumentados ni de capturas. Robolectric corre en API 36 y el móvil lleva API 35.
 - Formato con ktlint (Spotless) y lint estricto: 0 avisos; lo ignorado a propósito está en `app/lint.xml`.

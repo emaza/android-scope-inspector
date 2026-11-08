@@ -13,6 +13,13 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 - Los permisos **normales** (p. ej. `USE_BIOMETRIC`) se muestran como "Concedido al instalar" con una explicación; no se piden en ejecución.
 - Nada de pedir ubicación en segundo plano ni en la misma solicitud que la precisa.
 
+## Inspector del dispositivo
+- Pantalla aparte de los 4 módulos (no es un `DemoModule`: no pide permisos, así que no tiene atajo ni entra en `DemoModuleTest`). Muestra solo lo que una app lee sin permisos en ejecución (con `ACCESS_NETWORK_STATE`, normal).
+- Datos en bruto en `DeviceSnapshot` (fuente `AndroidDeviceInfoSource`, fake en tests); la presentación y la huella son puras en `InspectorReport`.
+- La huella combinada es un SHA-256 (16 hex) de datos estables: no incluye `ANDROID_ID` (distinto por app desde Android 8), batería, RAM libre, orientación ni red. La RAM total se redondea a GB.
+- No se declara `<queries>`: se enseña cuántas apps ve una app normal con la visibilidad de paquetes (se suprime `QueryPermissionsNeeded` y `HardwareIds` en ese método, con su motivo).
+- El portapapeles solo se **lee** al pulsar el botón (desde Android 12 el sistema avisa al usuario); la descripción (tipos MIME) se consulta al abrir, porque no genera aviso.
+
 ## Accesos directos
 - Android **no permite crear iconos al instalar**. La app ofrece el icono en la pantalla de inicio la **primera vez que se abre** (una sola vez; el sistema pide confirmación). Ese acceso directo fijado **no muestra los atajos**: estos salen solo en el icono real de la app (cajón de aplicaciones o arrastrado a la pantalla de inicio).
 - Atajos dinámicos a los 4 módulos, generados desde `DemoModule`. Enlace interno `scopeinspector://module/<ruta>`, sin `intent-filter`. `MainActivity` es `singleTask` y está **exportada**: acepta intents explícitos de otras apps, así que los módulos sensibles no deben depender de llegar por navegación.
@@ -47,7 +54,7 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 ## Calidad de código
 - **Formato: ktlint con Spotless** (`./gradlew spotlessApply` / `spotlessCheck`, este último en la CI). No detekt: su versión estable (1.23.8) apunta a Kotlin 2.0 y el proyecto usa 2.4. Estilo `android_studio` con comas finales, definido en `build.gradle.kts` porque Spotless no lee `ktlint_code_style` de `.editorconfig` (sí `max_line_length`, 120).
 - **Lint estricto:** `warningsAsErrors = true`; lo que se ignora a propósito está en `app/lint.xml` con su motivo (`OldTargetApi`, `ReportShortcutUsage`, y los avisos de versiones nuevas, que son cosa de Dependabot). `InlinedApi` se suprime en `AppPermission` porque `sinceSdk` ya condiciona el uso.
-- **Cobertura con Jacoco 0.8.15** (tests locales, incluidos los de Robolectric: necesitan `isIncludeNoLocationClasses` y excluir `jdk.internal.*`). El resumen (`scripts/coverage-summary.py`) deja fuera lo generado y `RouteMap`. **Trinquete:** la CI falla si las líneas bajan del mínimo de `app/coverage-min.txt` (85 %, medido 87,1 %); el mínimo solo se sube.
+- **Cobertura con Jacoco 0.8.15** (tests locales, incluidos los de Robolectric: necesitan `isIncludeNoLocationClasses` y excluir `jdk.internal.*`). El resumen (`scripts/coverage-summary.py`) deja fuera lo generado y `RouteMap`. **Trinquete:** la CI falla si las líneas bajan del mínimo de `app/coverage-min.txt` (88 %, medido 90,9 %); el mínimo solo se sube.
 - Reglas de copia de seguridad (`data_extraction_rules.xml`, `backup_rules.xml`): se excluye todo, coherente con `allowBackup="false"`.
 
 ## Entorno de desarrollo
