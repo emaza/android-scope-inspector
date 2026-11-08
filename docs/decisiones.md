@@ -3,7 +3,7 @@
 Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md). Si algo cambia, se edita aquí; el razonamiento original está en `archivo/` (solo si hace falta, y lo pide el usuario).
 
 ## Producto y stack
-- **Kotlin + Jetpack Compose + Navigation Compose**, una sola actividad. `minSdk 26`, `compileSdk 37`, `targetSdk 36`. AGP 9.4.1, Kotlin 2.4.21, Gradle 9.8.1 con wrapper.
+- **Kotlin + Jetpack Compose + Navigation Compose**, una sola actividad. `minSdk 26`, `compileSdk 37`, `targetSdk 36`. AGP 9.5.0, Kotlin 2.4.21, Gradle 9.8.2 con wrapper.
 - **Cada módulo es una demo real del permiso**, con evidencia visible (mapa, ruta, estado), no solo texto. El permiso se pide al pulsar la acción, no al abrir la pantalla.
 - **Mapa: OpenStreetMap con osmdroid** (sin API key). Obligatorio un User-Agent propio `ScopeInspector/<versión> (https://github.com/emaza/android-scope-inspector)` y la atribución "© OpenStreetMap contributors" visible; un `com.example.*` o un User-Agent genérico recibe la imagen "403 Access blocked". Caché de tiles en la caché de la app, sin permisos de almacenamiento.
 - **Identificador:** `applicationId = io.github.emaza.scopeinspector`; el `namespace` del código sigue siendo `com.example.scopeinspector`.
