@@ -31,8 +31,22 @@ class HomeScreenTest {
     private fun row(permission: AppPermission, stateLabel: Int): String =
         string(R.string.permission_row, string(permission.labelRes), string(stateLabel))
 
-    private fun show(onOpenModule: (DemoModule) -> Unit = {}) {
-        composeRule.setContent { ScopeInspectorTheme { HomeScreen(onOpenModule = onOpenModule) } }
+    private fun show(onOpenModule: (DemoModule) -> Unit = {}, onOpenInspector: () -> Unit = {}) {
+        composeRule.setContent {
+            ScopeInspectorTheme { HomeScreen(onOpenModule = onOpenModule, onOpenInspector = onOpenInspector) }
+        }
+    }
+
+    @Test
+    fun theInspectorCardExplainsItNeedsNoPermissionsAndOpensTheInspector() {
+        var opened = 0
+        show(onOpenInspector = { opened++ })
+
+        composeRule.onNodeWithText(string(R.string.inspector_card_body)).assertIsDisplayed()
+        composeRule.onNodeWithText(string(R.string.inspector_card_badge)).assertIsDisplayed()
+        composeRule.onNodeWithText(string(R.string.inspector_card_title)).performClick()
+
+        assertEquals(1, opened)
     }
 
     @Test

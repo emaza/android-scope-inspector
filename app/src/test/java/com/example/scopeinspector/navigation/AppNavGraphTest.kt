@@ -91,6 +91,20 @@ class AppNavGraphTest {
     }
 
     @Test
+    fun theInspectorCardOpensTheInspectorAndBackReturnsHome() {
+        show()
+
+        composeRule.onNodeWithText(string(R.string.inspector_card_title)).performClick()
+        composeRule.waitForIdle()
+        assertEquals(INSPECTOR_ROUTE, currentRoute)
+        assertEquals("home", routeBelow)
+
+        composeRule.onNodeWithText(string(R.string.action_back)).performClick()
+        composeRule.waitForIdle()
+        assertEquals("home", currentRoute)
+    }
+
+    @Test
     fun theBackButtonOfAModuleReturnsToHome() {
         show()
         composeRule.onNodeWithText(string(DemoModule.Biometric.titleRes)).performClick()

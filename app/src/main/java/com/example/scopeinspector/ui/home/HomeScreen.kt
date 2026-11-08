@@ -26,7 +26,7 @@ import com.example.scopeinspector.ui.components.PermissionStatusList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onOpenModule: (DemoModule) -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(onOpenModule: (DemoModule) -> Unit, modifier: Modifier = Modifier, onOpenInspector: () -> Unit = {}) {
     Scaffold(
         modifier = modifier,
         topBar = { TopAppBar(title = { Text(stringResource(R.string.home_title)) }) },
@@ -42,6 +42,7 @@ fun HomeScreen(onOpenModule: (DemoModule) -> Unit, modifier: Modifier = Modifier
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
+            item { InspectorCard(onClick = onOpenInspector) }
             items(DemoModule.entries) { module ->
                 ModuleCard(module = module, onClick = { onOpenModule(module) })
             }
@@ -67,6 +68,34 @@ private fun ShortcutsHint() {
                 text = stringResource(R.string.shortcuts_hint_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
+            )
+        }
+    }
+}
+
+/** Acceso al inspector: lo que cualquier app ve sin permisos, antes de los módulos que sí los piden. */
+@Composable
+private fun InspectorCard(onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+    ) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(
+                text = stringResource(R.string.inspector_card_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Text(
+                text = stringResource(R.string.inspector_card_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Text(
+                text = stringResource(R.string.inspector_card_badge),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

@@ -101,4 +101,110 @@
     <string name="module_background_example">Lanzas una descarga simulada de 30 segundos, bloqueas el móvil y recibes una notificación cuando acaba.</string>
     <string name="module_background_how_to_test">Pulsa «Solicitar permisos» y concede las notificaciones (Android 13 o superior; en versiones anteriores no se pide). Próximamente: programar una tarea y ver su progreso y la notificación final.</string>
     <string name="module_background_rationale">Necesitamos enviarte una notificación cuando la tarea en segundo plano termine. Si lo deniegas, la tarea se ejecuta igual pero sin aviso.</string>
+
+    <!-- Inspector del dispositivo: lo que cualquier app ve sin pedir permisos (equivalente a Browser Scope) -->
+    <string name="inspector_title">Inspector del dispositivo</string>
+    <string name="inspector_card_title">Inspector del dispositivo</string>
+    <string name="inspector_card_body">Todo lo que cualquier app puede saber de este móvil sin pedirte ningún permiso: hardware, pantalla, red, idioma, identificadores, sensores en vivo y portapapeles.</string>
+    <string name="inspector_card_badge">Sin permisos</string>
+    <string name="inspector_intro">Estos datos los puede leer cualquier app nada más instalarse, sin mostrarte ningún diálogo. Combinados permiten analizar tu uso, segmentar publicidad o reconocer tu móvil (huella digital).</string>
+    <string name="inspector_local_only">Se calculan en el propio móvil. Nada sale del dispositivo.</string>
+    <string name="action_refresh">Actualizar</string>
+    <string name="action_read_clipboard">Leer el portapapeles</string>
+    <string name="action_hide">Ocultar</string>
+
+    <string name="inspector_yes">Sí</string>
+    <string name="inspector_no">No</string>
+    <string name="inspector_unknown">Desconocido</string>
+    <string name="inspector_waiting">Esperando lectura…</string>
+    <string name="inspector_used_of_total">%1$s en uso de %2$s</string>
+    <string name="inspector_free_of_total">%1$s libres de %2$s</string>
+
+    <string name="inspector_hardware_title">Hardware</string>
+    <string name="inspector_hardware_why">El modelo, la memoria y la batería ayudan a estimar el poder adquisitivo y a distinguir tu móvil de otros. El nivel de batería cambia poco a poco y se ha usado para seguir a un usuario entre apps.</string>
+    <string name="inspector_device">Dispositivo</string>
+    <string name="inspector_brand_device">Marca · código</string>
+    <string name="inspector_soc">Procesador (SoC)</string>
+    <string name="inspector_abis">Arquitecturas</string>
+    <string name="inspector_cpu_cores">Núcleos de CPU</string>
+    <string name="inspector_ram">Memoria RAM</string>
+    <string name="inspector_storage">Almacenamiento</string>
+    <string name="inspector_battery">Batería</string>
+    <string name="inspector_battery_charging">%1$d %% · cargando · %2$s</string>
+    <string name="inspector_battery_discharging">%1$d %% · sin cargar · %2$s</string>
+
+    <string name="inspector_system_title">Sistema</string>
+    <string name="inspector_system_why">La versión y el parche de seguridad dicen si el móvil tiene vulnerabilidades conocidas. El tiempo encendido, junto al resto, ayuda a reconocer el mismo dispositivo.</string>
+    <string name="inspector_android_version">Android</string>
+    <string name="inspector_android_value">%1$s (API %2$d)</string>
+    <string name="inspector_security_patch">Parche de seguridad</string>
+    <string name="inspector_build_fingerprint">Build</string>
+    <string name="inspector_uptime">Encendido desde hace</string>
+
+    <string name="inspector_display_title">Pantalla</string>
+    <string name="inspector_display_why">La resolución, la densidad y la escala de fuente son de los datos más usados para la huella digital. La escala de fuente o el modo oscuro también revelan preferencias de accesibilidad.</string>
+    <string name="inspector_resolution">Resolución</string>
+    <string name="inspector_density">Densidad</string>
+    <string name="inspector_size_dp">Tamaño lógico</string>
+    <string name="inspector_refresh_rate">Frecuencia</string>
+    <string name="inspector_orientation">Orientación</string>
+    <string name="inspector_portrait">Vertical</string>
+    <string name="inspector_landscape">Horizontal</string>
+    <string name="inspector_hdr">HDR</string>
+    <string name="inspector_font_scale">Escala de fuente</string>
+    <string name="inspector_dark_mode">Modo oscuro</string>
+
+    <string name="inspector_network_title">Red</string>
+    <string name="inspector_network_why">Con el permiso normal ACCESS_NETWORK_STATE (concedido al instalar) la app sabe si usas Wi-Fi, datos o VPN, y el operador y país de la SIM no necesitan ningún permiso. La IP pública la ve cualquier servidor al que la app se conecte.</string>
+    <string name="inspector_connection">Conexión</string>
+    <string name="inspector_internet_validated">Internet comprobado</string>
+    <string name="inspector_metered">Red de pago (medida)</string>
+    <string name="inspector_vpn">VPN</string>
+    <string name="inspector_bandwidth">Ancho de banda (est.)</string>
+    <string name="inspector_data_saver">Ahorro de datos</string>
+    <string name="inspector_operator">Operador</string>
+    <string name="inspector_sim_country">País de la SIM</string>
+    <string name="transport_wifi">Wi-Fi</string>
+    <string name="transport_cellular">Datos móviles</string>
+    <string name="transport_ethernet">Ethernet</string>
+    <string name="transport_vpn">VPN</string>
+    <string name="transport_bluetooth">Bluetooth</string>
+    <string name="transport_other">Otra</string>
+    <string name="transport_none">Sin conexión</string>
+
+    <string name="inspector_region_title">Región y preferencias</string>
+    <string name="inspector_region_why">Los idiomas y la zona horaria sitúan al usuario aproximadamente sin pedir la ubicación. El lector de pantalla y las animaciones revelan necesidades de accesibilidad.</string>
+    <string name="inspector_languages">Idiomas</string>
+    <string name="inspector_time_zone">Zona horaria</string>
+    <string name="inspector_24h">Formato 24 horas</string>
+    <string name="inspector_screen_reader">Lector de pantalla</string>
+    <string name="inspector_animation_scale">Escala de animaciones</string>
+
+    <string name="inspector_identifiers_title">Identificadores y huella digital</string>
+    <string name="inspector_identifiers_why">ANDROID_ID es distinto para cada app desde Android 8, pero la huella combinada (un hash del modelo, la pantalla, el idioma, la zona horaria y los sensores) es la misma en todas las apps de este móvil: así se reconoce un dispositivo sin ningún identificador. Desde Android 11 la app solo ve las apps que declara (visibilidad de paquetes).</string>
+    <string name="inspector_android_id">ANDROID_ID</string>
+    <string name="inspector_developer_options">Opciones de desarrollador</string>
+    <string name="inspector_usb_debugging">Depuración USB</string>
+    <string name="inspector_visible_apps">Apps visibles</string>
+    <string name="inspector_visible_apps_value">Con icono en el lanzador: %1$d</string>
+    <string name="inspector_sensors">Sensores</string>
+    <string name="inspector_sensors_value">En el dispositivo: %1$d</string>
+    <string name="inspector_fingerprint">Huella combinada</string>
+
+    <string name="inspector_sensors_live_title">Sensores en vivo</string>
+    <string name="inspector_sensors_live_why">Acelerómetro, giroscopio y demás no piden permiso. Mueve el móvil y verás cambiar los valores: con ellos se deduce si caminas, vas en coche o qué escribes en el teclado, y cada sensor tiene pequeños errores de fábrica que lo hacen reconocible.</string>
+    <string name="inspector_sensors_none">Este dispositivo no tiene ninguno de los sensores de la lista.</string>
+    <string name="sensor_accelerometer">Acelerómetro</string>
+    <string name="sensor_gyroscope">Giroscopio</string>
+    <string name="sensor_magnetometer">Magnetómetro</string>
+    <string name="sensor_light">Luz ambiente</string>
+    <string name="sensor_proximity">Proximidad</string>
+    <string name="sensor_pressure">Presión</string>
+
+    <string name="inspector_clipboard_title">Portapapeles</string>
+    <string name="inspector_clipboard_why">Saber si hay algo copiado y de qué tipo no genera ningún aviso. Leer el contenido sí: desde Android 10 solo puede hacerlo la app que está en primer plano y, desde Android 12, el sistema muestra «Scope Inspector ha pegado del portapapeles». Pulsa el botón para verlo.</string>
+    <string name="inspector_clipboard_has_clip">Hay algo copiado</string>
+    <string name="inspector_clipboard_types">Sí (%1$s)</string>
+    <string name="inspector_clipboard_content">Contenido</string>
+    <string name="inspector_clipboard_empty">(vacío o no es texto)</string>
 </resources>
