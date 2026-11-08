@@ -3,7 +3,7 @@
 Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md). Si algo cambia, se edita aquí; el razonamiento original está en `archivo/` (solo si hace falta, y lo pide el usuario).
 
 ## Producto y stack
-- **Kotlin + Jetpack Compose + Navigation Compose**, una sola actividad. `minSdk 26`, `compileSdk 37`, `targetSdk 36`. AGP 9.4.1, Kotlin 2.4.21, Gradle 9.8.1 con wrapper.
+- **Kotlin + Jetpack Compose + Navigation Compose**, una sola actividad. `minSdk 26`, `compileSdk 37`, `targetSdk 36`. AGP 9.5.0, Kotlin 2.4.21, Gradle 9.8.2 con wrapper.
 - **Cada módulo es una demo real del permiso**, con evidencia visible (mapa, ruta, estado), no solo texto. El permiso se pide al pulsar la acción, no al abrir la pantalla.
 - **Mapa: OpenStreetMap con osmdroid** (sin API key). Obligatorio un User-Agent propio `ScopeInspector/<versión> (https://github.com/emaza/android-scope-inspector)` y la atribución "© OpenStreetMap contributors" visible; un `com.example.*` o un User-Agent genérico recibe la imagen "403 Access blocked". Caché de tiles en la caché de la app, sin permisos de almacenamiento.
 - **Identificador:** `applicationId = io.github.emaza.scopeinspector`; el `namespace` del código sigue siendo `com.example.scopeinspector`.
@@ -12,6 +12,13 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 - Estados: concedido, denegado, denegado permanentemente y no aplica (según versión de Android). La denegación permanente se deduce de "ya se pidió y no hay rationale", porque Android no la informa.
 - Los permisos **normales** (p. ej. `USE_BIOMETRIC`) se muestran como "Concedido al instalar" con una explicación; no se piden en ejecución.
 - Nada de pedir ubicación en segundo plano ni en la misma solicitud que la precisa.
+
+## Inspector del dispositivo
+- Pantalla aparte de los 4 módulos (no es un `DemoModule`: no pide permisos, así que no tiene atajo ni entra en `DemoModuleTest`). Muestra solo lo que una app lee sin permisos en ejecución (con `ACCESS_NETWORK_STATE`, normal).
+- Datos en bruto en `DeviceSnapshot` (fuente `AndroidDeviceInfoSource`, fake en tests); la presentación y la huella son puras en `InspectorReport`.
+- La huella combinada es un SHA-256 (16 hex) de datos estables: no incluye `ANDROID_ID` (distinto por app desde Android 8), batería, RAM libre, orientación ni red. La RAM total se redondea a GB.
+- No se declara `<queries>`: se enseña cuántas apps ve una app normal con la visibilidad de paquetes (se suprime `QueryPermissionsNeeded` y `HardwareIds` en ese método, con su motivo).
+- El portapapeles solo se **lee** al pulsar el botón (desde Android 12 el sistema avisa al usuario); la descripción (tipos MIME) se consulta al abrir, porque no genera aviso.
 
 ## Accesos directos
 - Android **no permite crear iconos al instalar**. La app ofrece el icono en la pantalla de inicio la **primera vez que se abre** (una sola vez; el sistema pide confirmación). Ese acceso directo fijado **no muestra los atajos**: estos salen solo en el icono real de la app (cajón de aplicaciones o arrastrado a la pantalla de inicio).
@@ -47,7 +54,7 @@ Resumen corto de lo que está decidido y por qué. Estado: [estado.md](estado.md
 ## Calidad de código
 - **Formato: ktlint con Spotless** (`./gradlew spotlessApply` / `spotlessCheck`, este último en la CI). No detekt: su versión estable (1.23.8) apunta a Kotlin 2.0 y el proyecto usa 2.4. Estilo `android_studio` con comas finales, definido en `build.gradle.kts` porque Spotless no lee `ktlint_code_style` de `.editorconfig` (sí `max_line_length`, 120).
 - **Lint estricto:** `warningsAsErrors = true`; lo que se ignora a propósito está en `app/lint.xml` con su motivo (`OldTargetApi`, `ReportShortcutUsage`, y los avisos de versiones nuevas, que son cosa de Dependabot). `InlinedApi` se suprime en `AppPermission` porque `sinceSdk` ya condiciona el uso.
-- **Cobertura con Jacoco 0.8.15** (tests locales, incluidos los de Robolectric: necesitan `isIncludeNoLocationClasses` y excluir `jdk.internal.*`). El resumen (`scripts/coverage-summary.py`) deja fuera lo generado y `RouteMap`. **Trinquete:** la CI falla si las líneas bajan del mínimo de `app/coverage-min.txt` (85 %, medido 87,1 %); el mínimo solo se sube.
+- **Cobertura con Jacoco 0.8.15** (tests locales, incluidos los de Robolectric: necesitan `isIncludeNoLocationClasses` y excluir `jdk.internal.*`). El resumen (`scripts/coverage-summary.py`) deja fuera lo generado y `RouteMap`. **Trinquete:** la CI falla si las líneas bajan del mínimo de `app/coverage-min.txt` (88 %, medido 91,2 %); el mínimo solo se sube.
 - Reglas de copia de seguridad (`data_extraction_rules.xml`, `backup_rules.xml`): se excluye todo, coherente con `allowBackup="false"`.
 
 ## Entorno de desarrollo

@@ -1,20 +1,21 @@
 # Estado actual
 
-Última actualización: 2026-10-15 (release `v0.2.1`). Decisiones vigentes: [decisiones.md](decisiones.md). El detalle histórico está en `archivo/` (no hace falta leerlo para trabajar).
+Última actualización: 2026-11-08 (Inspector del dispositivo, sin publicar en `dev`). Decisiones vigentes: [decisiones.md](decisiones.md). El detalle histórico está en `archivo/` (no hace falta leerlo para trabajar).
 
 ## Versión y ramas
 
 | | |
 |---|---|
 | Última release | `v0.2.1` en `main` (PR #15), 2026-10-15 |
-| `dev` | compila como `0.2.2-dev.N` (sin cambios que suban versión desde la release) |
-| Pendiente | nada por promocionar |
+| `dev` | con el Inspector del dispositivo (`feat`), compilará como `0.3.0-dev.N` |
+| Pendiente | promocionar `dev` → `main` para sacar `v0.3.0` (Inspector del dispositivo) |
 | Ramas | las `fase-*` ya fusionadas se borraron (locales y en `origin`); cada fase nueva sale de `dev`. Dependabot abre PR a `dev` desde ramas `dependabot/*` |
 
 ## Módulos de la app
 
 | Módulo | Estado |
 |---|---|
+| **Inspector del dispositivo** | Hecho (equivalente a Browser Scope Inspector). Lo que cualquier app lee **sin permisos en ejecución**: hardware, sistema, pantalla, red, región y accesibilidad, identificadores (`ANDROID_ID`, apps visibles, huella combinada SHA-256), sensores en vivo y portapapeles (descripción pasiva y lectura al pulsar). Tarjeta destacada en inicio, ruta `inspector` (sin atajo ni deep link). Ideas para ampliarlo: biometría del comportamiento (toques y gestos), lista completa de sensores, apps instaladas con `<queries>` |
 | **Ubicación** | Mapa de OpenStreetMap con tu posición y la ruta en vivo (distancia, velocidad, tiempo, precisión). **Falta** la detección de actividad física (`ActivityRecognitionClient`, interruptor opcional con `ACTIVITY_RECOGNITION`) |
 | **Cámara y vídeo** | Solo pantalla genérica de permisos. Pendiente: CameraX (vista previa, foto, vídeo) y Media3 para reproducir |
 | **Biometría** | Solo pantalla genérica. Pendiente: `BiometricPrompt` + Keystore (nota secreta). Exigirá pasar `MainActivity` a `FragmentActivity` |
@@ -30,8 +31,8 @@ motorola edge 40 neo, Android 15 (API 35), Play Services presente. Se comprobó 
 
 ## Tests y calidad
 
-- **165 tests** JVM + Robolectric (0 fallos) y comprobaciones de scripts bash.
-- **Cobertura de líneas 87,1 %** (ramas 74 %, sin `RouteMap` ni código generado). Lo peor: `shortcuts` 15 % (`AppShortcuts` sin test), `MainActivity` 0 % y `LocationRepository` (Play Services). La CI exige un mínimo (`app/coverage-min.txt`, 85 %).
+- **208 tests** JVM + Robolectric (0 fallos) y comprobaciones de scripts bash.
+- **Cobertura de líneas 91,2 %** (ramas 72 %, sin `RouteMap` ni código generado). Lo peor: `shortcuts` 15 % (`AppShortcuts` sin test), `MainActivity` 0 % y `LocationRepository` (Play Services). La CI exige un mínimo (`app/coverage-min.txt`, 88 %).
 - Comprobación de mutaciones: 8 errores introducidos a mano, los 8 detectados.
 - Huecos conocidos (ver cobertura): el mapa real (osmdroid) no se prueba (se sustituye en los tests), `AppShortcuts` solo en su lógica, sin tests instrumentados ni de capturas. Robolectric corre en API 36 y el móvil lleva API 35.
 - Formato con ktlint (Spotless) y lint estricto: 0 avisos; lo ignorado a propósito está en `app/lint.xml`.
@@ -54,7 +55,7 @@ source scripts/dev-env.sh                    # JDK 21 + Android SDK del HOME; no
 ./gradlew --stop                             # libera el daemon al terminar
 ```
 
-Si falta el entorno: JDK 21 Temurin y Gradle 9.8.1 en `~/.local/dev-tools` (comprobando sus sha256), el binario `android` de `https://dl.google.com/android/cli/latest/linux_x86_64/android` en `~/.local/bin`, y `android sdk install platforms/android-37.0 build-tools/36.0.0 platform-tools`. La primera compilación tarda unos 6 minutos (descarga dependencias) y las siguientes, segundos. Sin ese entorno, la verificación es la CI.
+Si falta el entorno: JDK 21 Temurin y Gradle 9.8.2 en `~/.local/dev-tools` (comprobando sus sha256), el binario `android` de `https://dl.google.com/android/cli/latest/linux_x86_64/android` en `~/.local/bin`, y `android sdk install platforms/android-37.0 build-tools/36.0.0 platform-tools`. La primera compilación tarda unos 6 minutos (descarga dependencias) y las siguientes, segundos. Sin ese entorno, la verificación es la CI.
 
 Dos cosas del `android` CLI: en su primer arranque **aceptó automáticamente la licencia del SDK** (para revertirlo, `rm ~/Android/Sdk/licenses/android-sdk-license`), y `android layout` **instala en el móvil** el paquete `com.android.cli.interact.instrumentation`, que hay que desinstalar al terminar (`adb shell pm uninstall com.android.cli.interact.instrumentation`).
 
@@ -65,5 +66,5 @@ Depuración USB: `adb` está en `~/Android/Sdk/platform-tools`. Autorizar el ord
 1. Revisar y fusionar las PR de Dependabot (la primera, #16).
 2. Módulos pendientes (ver tabla).
 3. ~~Lote 3 de automatización~~ **hecho** (CI con informes, ktlint y lint estricto, cobertura con mínimo, Dependabot, plantilla de PR y hook `commit-msg`); plan y decisiones en [plan-lote-3.md](plan-lote-3.md). Dependabot, activo desde que su configuración llegó a `main` (la lee de la rama por defecto), abre PR a `dev` los lunes; se fusionan una a una por el flujo normal.
-4. **Lote 4, a valorar:** capturas de pantalla (con AGP 9.4.1 sería el plugin antiguo), E2E mínimo, R8.
+4. **Lote 4, a valorar:** capturas de pantalla (con AGP 9.5.0 sería el plugin antiguo), E2E mínimo, R8.
 5. Subir `targetSdk` a 37 y revisar los avisos de lint cuando convenga.

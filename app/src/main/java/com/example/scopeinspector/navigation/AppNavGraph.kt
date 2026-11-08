@@ -11,12 +11,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import com.example.scopeinspector.feature.inspector.InspectorScreen
 import com.example.scopeinspector.feature.location.LocationScreen
 import com.example.scopeinspector.shortcuts.ShortcutPolicy
 import com.example.scopeinspector.ui.home.HomeScreen
 import com.example.scopeinspector.ui.module.ModuleScreen
 
 private const val HOME_ROUTE = "home"
+const val INSPECTOR_ROUTE = "inspector"
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
@@ -39,7 +41,13 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 
     NavHost(navController = navController, startDestination = HOME_ROUTE) {
         composable(HOME_ROUTE) {
-            HomeScreen(onOpenModule = { module -> navController.navigate(module.route) })
+            HomeScreen(
+                onOpenModule = { module -> navController.navigate(module.route) },
+                onOpenInspector = { navController.navigate(INSPECTOR_ROUTE) },
+            )
+        }
+        composable(INSPECTOR_ROUTE) {
+            InspectorScreen(onBack = { navController.popBackStack() })
         }
         DemoModule.entries.forEach { module ->
             composable(

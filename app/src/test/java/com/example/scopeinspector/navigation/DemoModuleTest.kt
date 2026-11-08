@@ -13,6 +13,7 @@ class DemoModuleTest {
         val routes = DemoModule.entries.map { it.route }
         assertEquals(routes.size, routes.toSet().size)
         assertFalse("home" in routes)
+        assertFalse(INSPECTOR_ROUTE in routes)
     }
 
     @Test
